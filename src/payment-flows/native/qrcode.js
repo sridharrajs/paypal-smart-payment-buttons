@@ -47,6 +47,7 @@ function getEligibility({ fundingSource, props, serviceData, validatePromise } :
                 // ignore isUserAgentEligible and isBrowserMobileAndroid for Venmo Desktop as they don't apply
                 const eligibleReasons = [ 'isUserAgentEligible', 'isBrowserMobileAndroid' ];
                 const ineligibleReasons = eligibility && eligibility[fundingSource]?.ineligibilityReason?.split(',');
+
                 const ineligible = ineligibleReasons?.reduce((acc, reason) => {
                     acc = acc || eligibleReasons.indexOf(reason) === -1;
                     return acc;

@@ -14,7 +14,6 @@ describe('native qrcode cases', () => {
 
     it('should render a button with createOrder, click the button, and render checkout via qrcode path', async () => {
         return await wrapPromise(async ({ expect, avoid }) => {
-            window.xprops.enableNativeCheckout = true;
             window.xprops.platform = PLATFORM.MOBILE;
             delete window.xprops.onClick;
 
@@ -22,6 +21,22 @@ describe('native qrcode cases', () => {
 
             const gqlMock = getGraphQLApiMock({
                 extraHandler: expect('firebaseGQLCall', ({ data }) => {
+                    if (data.query.includes('query GetNativeEligibility')) {
+                        return {
+                            data: {
+                                mobileSDKEligibility: {
+                                    paypal: {
+                                        eligibility: true
+                                    },
+                                    venmo: {
+                                        eligibility:         false,
+                                        ineligibilityReason: ''
+                                    }
+                                }
+                            }
+                        };
+                    }
+
                     if (!data.query.includes('query GetFireBaseSessionToken')) {
                         return;
                     }
@@ -115,7 +130,6 @@ describe('native qrcode cases', () => {
 
     it('should render a button with createOrder, click the button, and render checkout via qrcode path with onClick rejecting', async () => {
         return await wrapPromise(async ({ expect, avoid }) => {
-            window.xprops.enableNativeCheckout = true;
             window.xprops.platform = PLATFORM.MOBILE;
             delete window.xprops.onClick;
 
@@ -147,6 +161,193 @@ describe('native qrcode cases', () => {
             });
 
             await clickButton(FUNDING.VENMO);
+        });
+    });
+
+    it('should render a button with createOrder, click the button, and render checkout via qrcode path with eligibility disregard for isUserAgentEligible or isBrowserMobileAndroid', async () => {
+        return await wrapPromise(async ({ expect, avoid }) => {
+            window.xprops.platform = PLATFORM.MOBILE;
+            delete window.xprops.onClick;
+
+            const sessionToken = uniqueID();
+
+            const gqlMock = getGraphQLApiMock({
+                extraHandler: expect('firebaseGQLCall', ({ data }) => {
+                    if (data.query.includes('query GetNativeEligibility')) {
+                        return {
+                            data: {
+                                mobileSDKEligibility: {
+                                    paypal: {
+                                        eligibility: true
+                                    },
+                                    venmo: {
+                                        eligibility:         false,
+                                        ineligibilityReason: 'isUserAgentEligible,isBrowserMobileAndroid'
+                                    }
+                                }
+                            }
+                        };
+                    }
+
+                    if (!data.query.includes('query GetFireBaseSessionToken')) {
+                        return;
+                    }
+
+                    if (!data.variables.sessionUID) {
+                        throw new Error(`Expected sessionUID to be passed`);
+                    }
+
+                    return {
+                        data: {
+                            firebase: {
+                                auth: {
+                                    sessionUID: data.variables.sessionUID,
+                                    sessionToken
+                                }
+                            }
+                        }
+                    };
+                })
+            }).expectCalls();
+
+            let sessionUID;
+
+            mockFunction(window.paypal, 'QRCode', expect('QRCode', ({ original, args: [ props ] }) => {
+                const query = parseQuery(props.qrPath.split('?')[1]);
+                sessionUID = query.sessionUID;
+                return original(props);
+            }));
+
+            const { expect: expectSocket, onInit, onApprove } = getNativeFirebaseMock({
+                getSessionUID: () => {
+                    if (!sessionUID) {
+                        throw new Error(`Session UID not present`);
+                    }
+
+                    return sessionUID;
+                },
+                extraHandler: expect('extraHandler', ({ message_name, message_type }) => {
+                    if (message_name === 'onInit' && message_type === 'request') {
+                        ZalgoPromise.delay(50).then(onApprove);
+                    }
+                })
+            });
+
+            const mockWebSocketServer = expectSocket();
+
+            const orderID = generateOrderID();
+            const payerID = 'XXYYZZ123456';
+
+            window.xprops.createOrder = mockAsyncProp(expect('createOrder', async () => {
+                return ZalgoPromise.try(() => {
+                    return orderID;
+                });
+            }), 50);
+
+            window.xprops.onCancel = avoid('onCancel');
+
+            window.xprops.onApprove = mockAsyncProp(expect('onApprove', (data) => {
+                if (data.orderID !== orderID) {
+                    throw new Error(`Expected orderID to be ${ orderID }, got ${ data.orderID }`);
+                }
+
+                if (data.payerID !== payerID) {
+                    throw new Error(`Expected payerID to be ${ payerID }, got ${ data.payerID }`);
+                }
+            }));
+
+            const fundingEligibility = {
+                venmo: {
+                    eligible: true
+                }
+            };
+
+            createButtonHTML({ fundingEligibility });
+
+            await mockSetupButton({
+                eligibility: {
+                    cardFields: false,
+                    native:     true
+                }
+            });
+
+            await clickButton(FUNDING.VENMO);
+            await ZalgoPromise.delay(50).then(onInit);
+            await window.xprops.onApprove.await();
+
+            await mockWebSocketServer.done();
+            gqlMock.done();
+        });
+    });
+
+    it('should render a button with createOrder, click the button, and render checkout via qrcode path with eligibility failing', async () => {
+        return await wrapPromise(async ({ expect, avoid }) => {
+            window.xprops.platform = PLATFORM.MOBILE;
+            delete window.xprops.onClick;
+
+            const QRCode = window.paypal.QRCode;
+            mockFunction(window.paypal, 'QRCode', avoid('QRCode', QRCode));
+
+            const gqlMock = getGraphQLApiMock({
+                extraHandler: expect('firebaseGQLCall', ({ data }) => {
+                    if (data.query.includes('query GetNativeEligibility')) {
+                        return {
+                            data: {
+                                mobileSDKEligibility: {
+                                    paypal: {
+                                        eligibility: true
+                                    },
+                                    venmo: {
+                                        eligibility:         false,
+                                        ineligibilityReason: 'isUserAgentEligible,isBrowserMobileAndroid,isEnvEligible'
+                                    }
+                                }
+                            }
+                        };
+                    }
+                })
+            }).expectCalls();
+
+            const orderID = generateOrderID();
+            const payerID = 'AAABBBCCC';
+
+            window.xprops.createOrder = mockAsyncProp(expect('createOrder', async () => {
+                return ZalgoPromise.try(() => {
+                    return orderID;
+                });
+            }), 50);
+
+            window.xprops.onCancel = avoid('onCancel');
+
+            window.xprops.onApprove = mockAsyncProp(expect('onApprove', (data) => {
+                if (data.orderID !== orderID) {
+                    throw new Error(`Expected orderID to be ${ orderID }, got ${ data.orderID }`);
+                }
+
+                if (data.payerID !== payerID) {
+                    throw new Error(`Expected payerID to be ${ payerID }, got ${ data.payerID }`);
+                }
+            }));
+
+            const fundingEligibility = {
+                venmo: {
+                    eligible: true
+                }
+            };
+
+            createButtonHTML({ fundingEligibility });
+
+            await mockSetupButton({
+                eligibility: {
+                    cardFields: false,
+                    native:     true
+                }
+            });
+
+            await clickButton(FUNDING.VENMO);
+            await window.xprops.onApprove.await();
+
+            gqlMock.done();
         });
     });
 });
