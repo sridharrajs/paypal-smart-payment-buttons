@@ -48,16 +48,13 @@ function getEligibility({ fundingSource, props, serviceData, validatePromise } :
                 const eligibleReasons = [ 'isUserAgentEligible', 'isBrowserMobileAndroid' ];
                 const ineligibleReasons = eligibility && eligibility[fundingSource]?.ineligibilityReason?.split(',');
 
-                const ineligible = ineligibleReasons?.every(reason => {
-                    return eligibleReasons.indexOf(reason) === -1;
+                const eligible = ineligibleReasons?.every(reason => {
+                    return eligibleReasons?.indexOf(reason) !== -1;
                 });
-                    acc = acc || eligibleReasons.indexOf(reason) === -1;
-                    return acc;
-                }, false);
 
                 if (
                     ineligibleReasons &&
-                    ineligible
+                    !eligible
                 ) {
                     getLogger().info(`native_appswitch_ineligible`, { orderID })
                         .track({
