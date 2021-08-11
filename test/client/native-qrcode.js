@@ -21,22 +21,6 @@ describe('native qrcode cases', () => {
 
             const gqlMock = getGraphQLApiMock({
                 extraHandler: expect('firebaseGQLCall', ({ data }) => {
-                    if (data.query.includes('query GetNativeEligibility')) {
-                        return {
-                            data: {
-                                mobileSDKEligibility: {
-                                    paypal: {
-                                        eligibility: true
-                                    },
-                                    venmo: {
-                                        eligibility:         false,
-                                        ineligibilityReason: ''
-                                    }
-                                }
-                            }
-                        };
-                    }
-
                     if (!data.query.includes('query GetFireBaseSessionToken')) {
                         return;
                     }
