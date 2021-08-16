@@ -7,7 +7,7 @@ import { type CrossDomainWindowType } from 'cross-domain-utils/src';
 
 import { getNativeEligibility } from '../../api';
 import { getLogger, getStorageID } from '../../lib';
-import { FPTI_STATE, FPTI_TRANSITION, TARGET_ELEMENT, QRCODE_STATE } from '../../constants';
+import { FPTI_STATE, FPTI_TRANSITION, TARGET_ELEMENT, QRCODE_STATE, FPTI_CUSTOM_KEY } from '../../constants';
 import type { ButtonProps, ServiceData, Config, Components } from '../../button/props';
 import { type OnShippingChangeData } from '../../props/onShippingChange';
 
@@ -56,10 +56,14 @@ function getEligibility({ fundingSource, props, serviceData, validatePromise } :
                     ineligibleReasons &&
                     !eligible
                 ) {
+                    const ineligibilityReason = eligibility && eligibility[fundingSource] ? eligibility[fundingSource].ineligibilityReason : '';
+                    
                     getLogger().info(`native_appswitch_ineligible`, { orderID })
                         .track({
                             [FPTI_KEY.STATE]:           FPTI_STATE.BUTTON,
-                            [FPTI_KEY.TRANSITION]:      FPTI_TRANSITION.NATIVE_APP_SWITCH_INELIGIBLE
+                            [FPTI_KEY.TRANSITION]:      FPTI_TRANSITION.NATIVE_APP_SWITCH_INELIGIBLE,
+                            [FPTI_KEY.CHOSEN_FUNDING]:  fundingSource,
+                            [FPTI_CUSTOM_KEY.INFO_MSG]: ineligibilityReason
                         }).flush();
 
                     return false;
@@ -243,7 +247,7 @@ export function openNativeQRCode({ props, serviceData, config, components, fundi
             };
 
             const connection = connectNative({
-                props, serviceData, config, fundingSource, sessionUID,
+                config, sessionUID,
                 callbacks: {
                     onInit:           onInitializeQR,
                     onApprove:        onApproveQR,

@@ -86,10 +86,14 @@ function getEligibility({ fundingSource, props, serviceData, sfvc, validatePromi
                 domain:       merchantDomain
             }).then(eligibility => {
                 if (!eligibility || !eligibility[fundingSource] || !eligibility[fundingSource].eligibility) {
+                    const ineligibilityReason = eligibility && eligibility[fundingSource] ? eligibility[fundingSource].ineligibilityReason : '';
+
                     getLogger().info(`native_appswitch_ineligible`, { orderID })
                         .track({
                             [FPTI_KEY.STATE]:           FPTI_STATE.BUTTON,
-                            [FPTI_KEY.TRANSITION]:      FPTI_TRANSITION.NATIVE_APP_SWITCH_INELIGIBLE
+                            [FPTI_KEY.TRANSITION]:      FPTI_TRANSITION.NATIVE_APP_SWITCH_INELIGIBLE,
+                            [FPTI_KEY.CHOSEN_FUNDING]:  fundingSource,
+                            [FPTI_CUSTOM_KEY.INFO_MSG]: ineligibilityReason
                         }).flush();
 
                     return false;
@@ -174,6 +178,10 @@ export function openNativePopup({ props, serviceData, config, fundingSource, ses
             onClose();
         }, 500);
 
+        const closeErrorListener = onCloseWindow(nativePopupWin, () => {
+            reject(new Error(`Native popup closed`));
+        }, 500);
+
         const closePopup = (event : string) => {
             getLogger().info(`native_closing_popup_${ event }`).track({
                 [FPTI_KEY.STATE]:       FPTI_STATE.BUTTON,
@@ -244,13 +252,19 @@ export function openNativePopup({ props, serviceData, config, fundingSource, ses
                 }).flush();
 
                 const connection = connectNative({
-                    props, serviceData, config, fundingSource, sessionUID,
+                    config, sessionUID,
                     callbacks: {
-                        onInit,
+                        onInit: () => {
+                            resolve();
+                            return onInit();
+                        },
                         onApprove,
                         onCancel,
                         onShippingChange,
-                        onError,
+                        onError: ({ data }) => {
+                            reject(new Error(data.message));
+                            return onError({ data });
+                        },
                         onFallback: ({ data }) => {
                             return onFallback({
                                 win:    nativePopupWin,
@@ -261,9 +275,7 @@ export function openNativePopup({ props, serviceData, config, fundingSource, ses
                 });
 
                 clean.register(connection.cancel);
-
-                return connection.setProps();
-            }).then(resolve, reject);
+            }).catch(reject);
         });
 
         const detectWebSwitch = once(() : ZalgoPromise<void> => {
@@ -354,7 +366,8 @@ export function openNativePopup({ props, serviceData, config, fundingSource, ses
                         }).flush();
 
                     if (isAndroidChrome()) {
-                        const appSwitchCloseListener = onCloseWindow(nativePopupWin, () => detectAppSwitch());
+                        closeErrorListener.cancel();
+                        const appSwitchCloseListener = onCloseWindow(nativePopupWin, () => detectAppSwitch(), 50);
                         setTimeout(appSwitchCloseListener.cancel, 1000);
                     }
 
