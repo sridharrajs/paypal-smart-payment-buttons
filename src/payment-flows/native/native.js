@@ -73,17 +73,9 @@ function initNative({ props, components, config, payment, serviceData } : InitOp
             })
             .flush();
 
-        const updateButtonClientConfigPromise = ZalgoPromise.try(() => {
-            return createOrder()
-                .then(orderID => {
-                    return updateButtonClientConfig({ fundingSource, orderID, inline: false, userExperienceFlow: 'native', buttonSessionID });
-                });
-        });
-
         const data = { payerID, paymentID, billingToken, forceRestAPI: true };
         const actions = { restart: () => fallbackToWebCheckout() };
         return ZalgoPromise.all([
-            updateButtonClientConfigPromise,
             onApprove(data, actions).catch(err => {
                 getLogger().info(`native_message_onapprove_error`, { payerID, paymentID, billingToken })
                     .track({

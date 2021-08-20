@@ -100,8 +100,6 @@ export function initiatePaymentFlow({ payment, serviceData, config, components, 
         return ZalgoPromise.try(() => {
             return onClick ? onClick({ fundingSource }) : true;
         }).then(valid => {
-            return valid ? clickPromise : false;
-        }).then(valid => {
             if (valid === false) {
                 return;
             }
