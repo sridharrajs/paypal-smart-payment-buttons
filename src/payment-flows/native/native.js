@@ -27,7 +27,7 @@ function setupNative({ props, serviceData } : SetupOptions) : ZalgoPromise<void>
 
 function initNative({ props, components, config, payment, serviceData } : InitOptions) : PaymentFlowInstance {
     const { onApprove, onCancel, onError,
-        buttonSessionID, onShippingChange } = props;
+        buttonSessionID, onShippingChange, createOrder } = props;
     const { fundingSource } = payment;
     const { firebase: firebaseConfig } = config;
 
@@ -66,7 +66,6 @@ function initNative({ props, components, config, payment, serviceData } : InitOp
 
     const onApproveCallback = ({ data: { payerID, paymentID, billingToken } }) => {
         approved = true;
-
         getLogger().info(`native_message_onapprove`, { payerID, paymentID, billingToken })
             .track({
                 [FPTI_KEY.TRANSITION]:      FPTI_TRANSITION.NATIVE_ON_APPROVE,
@@ -74,9 +73,17 @@ function initNative({ props, components, config, payment, serviceData } : InitOp
             })
             .flush();
 
+        const updateButtonClientConfigPromise = ZalgoPromise.try(() => {
+            return createOrder()
+                .then(orderID => {
+                    return updateButtonClientConfig({ fundingSource, orderID, inline: false, userExperienceFlow: 'native', buttonSessionID });
+                });
+        });
+
         const data = { payerID, paymentID, billingToken, forceRestAPI: true };
         const actions = { restart: () => fallbackToWebCheckout() };
         return ZalgoPromise.all([
+            updateButtonClientConfigPromise,
             onApprove(data, actions).catch(err => {
                 getLogger().info(`native_message_onapprove_error`, { payerID, paymentID, billingToken })
                     .track({
