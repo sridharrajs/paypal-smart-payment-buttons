@@ -68,7 +68,7 @@ type ThreeDomainSecureProps = {|
 |};
 
 function handleThreeDomainSecure({ ThreeDomainSecure, createOrder, getParent } : ThreeDomainSecureProps) : ZalgoPromise<void> {
-    
+
     const promise = new ZalgoPromise();
     const instance = ThreeDomainSecure({
         createOrder,
@@ -97,7 +97,20 @@ function handleValidateResponse({ ThreeDomainSecure, status, body, createOrder, 
         }
 
         if (status !== 200) {
-            throw new Error(`Validate payment failed with status: ${ status }`);
+            const DEFAULT_ERROR_MESSAGE = `Validate payment failed with status: ${ status }`;
+            let message = DEFAULT_ERROR_MESSAGE;
+
+            const hasDescriptiveErrorCode = Array.isArray(body.details);
+            if (hasDescriptiveErrorCode) {
+                const [ { issue, description } = {} ] = body.details;
+                message = [
+                    ...(issue ? [ `Code: ${ issue }` ] : []),
+                    ...(description ? [ `Description: ${ description }` ] : [])
+                ].join(', ');
+                message = message.trim().length === 0 ? DEFAULT_ERROR_MESSAGE : message;
+            }
+
+            throw new Error(message);
         }
     });
 }
@@ -173,7 +186,7 @@ function initVaultCapture({ props, components, payment, serviceData, config } : 
         return createOrder().then(orderID => {
             return loadFraudnet({ env, clientMetadataID, cspNonce }).catch(noop).then(() => {
                 const installmentsEligible = isVaultCaptureInstallmentsEligible({ props, serviceData });
-            
+
                 getLogger()
                     .info(installmentsEligible ? 'vault_merchant_installments_eligible' : 'vault_merchant_installments_ineligible')
                     .track({
@@ -248,7 +261,7 @@ function setupVaultMenu({ props, payment, serviceData, components, config } : Me
                 [FPTI_KEY.TRANSITION]:      FPTI_TRANSITION.CLICK_CHOOSE_FUNDING,
                 [FPTI_KEY.OPTION_SELECTED]: FPTI_MENU_OPTION.CHOOSE_FUNDING
             }).flush();
-            
+
             return ZalgoPromise.try(() => {
                 return updateMenuClientConfig();
             }).then(() => {
