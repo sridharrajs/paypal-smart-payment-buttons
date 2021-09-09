@@ -174,17 +174,17 @@ window.spb = function(modules) {
             })), S.d(N, "QUERY_BOOL", (function() {
                 return o;
             })), S.d(N, "UNKNOWN", (function() {
-                return O;
-            })), S.d(N, "PROTOCOL", (function() {
                 return Z;
+            })), S.d(N, "PROTOCOL", (function() {
+                return O;
             })), S.d(N, "PAGE_TYPES", (function() {
                 return i;
             })), S.d(N, "MERCHANT_ID_MAX", (function() {
                 return M;
             })), S.d(N, "PLATFORM", (function() {
-                return k;
+                return h;
             })), S.d(N, "TYPES", (function() {
-                return g;
+                return k;
             }));
             var R = {
                 AD: "AD",
@@ -426,7 +426,8 @@ window.spb = function(modules) {
                 TL: "tl",
                 TR: "tr",
                 VI: "vi",
-                ZH: "zh"
+                ZH: "zh",
+                ZH_HANT: "zh_Hant"
             }, T = {
                 AD: [ t.EN, t.FR, t.ES, t.ZH ],
                 AE: [ t.EN, t.FR, t.ES, t.ZH, t.AR ],
@@ -504,7 +505,7 @@ window.spb = function(modules) {
                 GT: [ t.ES, t.EN, t.FR, t.ZH ],
                 GW: [ t.EN, t.FR, t.ES, t.ZH ],
                 GY: [ t.EN, t.FR, t.ES, t.ZH ],
-                HK: [ t.EN, t.ZH ],
+                HK: [ t.EN, t.ZH_HANT, t.ZH ],
                 HN: [ t.ES, t.EN, t.FR, t.ZH ],
                 HR: [ t.EN ],
                 HU: [ t.HU, t.EN, t.FR, t.ES, t.ZH ],
@@ -612,7 +613,7 @@ window.spb = function(modules) {
                 TR: [ t.TR, t.EN ],
                 TT: [ t.EN, t.FR, t.ES, t.ZH ],
                 TV: [ t.EN, t.FR, t.ES, t.ZH ],
-                TW: [ t.ZH, t.EN ],
+                TW: [ t.ZH_HANT, t.ZH, t.EN ],
                 TZ: [ t.EN, t.FR, t.ES, t.ZH ],
                 UA: [ t.EN, t.RU, t.FR, t.ES, t.ZH ],
                 UG: [ t.EN, t.FR, t.ES, t.ZH ],
@@ -791,7 +792,7 @@ window.spb = function(modules) {
             }, o = {
                 TRUE: "true",
                 FALSE: "false"
-            }, O = "unknown", Z = {
+            }, Z = "unknown", O = {
                 HTTP: "http",
                 HTTPS: "https"
             }, i = {
@@ -871,7 +872,8 @@ window.spb = function(modules) {
                 PAY_NOW: "pay_now",
                 STICKINESS_ID: "stickiness_id",
                 TIMESTAMP: "t",
-                OPTION_SELECTED: "optsel"
+                OPTION_SELECTED: "optsel",
+                USER_IDENTITY_METHOD: "user_identity_method"
             }, p = {
                 COMMIT: "commit",
                 CONTINUE: "continue"
@@ -928,14 +930,23 @@ window.spb = function(modules) {
                 PAY_IN_4: "payIn4",
                 PAYLATER: "paylater",
                 CREDIT: "credit"
-            }, k = {
+            }, h = {
                 DESKTOP: "desktop",
                 MOBILE: "mobile"
-            }, g = !0;
+            }, k = !0;
         } ]);
     },
     "./node_modules/@paypal/sdk-constants/index.js": function(module, exports, __webpack_require__) {
         module.exports = __webpack_require__("./node_modules/@paypal/sdk-constants/dist/paypal-sdk-constants.js");
+    },
+    "./server/components/native/constants.js": function(module, exports, __webpack_require__) {
+        "use strict";
+        exports.__esModule = !0;
+        exports.CHANNEL = void 0;
+        exports.CHANNEL = {
+            DESKTOP: "desktop-web",
+            MOBILE: "mobile-web"
+        };
     },
     "./src/button/index.js": function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2506,6 +2517,9 @@ window.spb = function(modules) {
                 return !1;
             }
         };
+        var extendIfDefined = function(target, source) {
+            for (var key in source) source.hasOwnProperty(key) && source[key] && (target[key] = source[key]);
+        };
         function httpTransport(_ref) {
             var url = _ref.url, method = _ref.method, headers = _ref.headers, json = _ref.json, _ref$enableSendBeacon = _ref.enableSendBeacon, enableSendBeacon = void 0 !== _ref$enableSendBeacon && _ref$enableSendBeacon;
             return promise_ZalgoPromise.try((function() {
@@ -2535,9 +2549,6 @@ window.spb = function(modules) {
                     json: json
                 });
             })).then(src_util_noop);
-        }
-        function extendIfDefined(target, source) {
-            for (var key in source) source.hasOwnProperty(key) && source[key] && !target[key] && (target[key] = source[key]);
         }
         function Logger(_ref2) {
             var url = _ref2.url, prefix = _ref2.prefix, _ref2$logLevel = _ref2.logLevel, logLevel = void 0 === _ref2$logLevel ? "debug" : _ref2$logLevel, _ref2$transport = _ref2.transport, transport = void 0 === _ref2$transport ? httpTransport : _ref2$transport, amplitudeApiKey = _ref2.amplitudeApiKey, _ref2$flushInterval = _ref2.flushInterval, flushInterval = void 0 === _ref2$flushInterval ? 6e4 : _ref2$flushInterval, _ref2$enableSendBeaco = _ref2.enableSendBeacon, enableSendBeacon = void 0 !== _ref2$enableSendBeaco && _ref2$enableSendBeaco;
@@ -5676,7 +5687,16 @@ window.spb = function(modules) {
                                     createOrder: createOrder,
                                     getParent: getParent
                                 });
-                                if (200 !== status) throw new Error("Validate payment failed with status: " + status);
+                                if (200 !== status) {
+                                    var DEFAULT_ERROR_MESSAGE = "Validate payment failed with status: " + status;
+                                    var message = DEFAULT_ERROR_MESSAGE;
+                                    if (Array.isArray(body.details)) {
+                                        var _body$details$ = body.details[0];
+                                        var issue = (_body$details$ = void 0 === _body$details$ ? {} : _body$details$).issue, description = _body$details$.description;
+                                        message = 0 === (message = [].concat(issue ? [ "Code: " + issue ] : [], description ? [ "Description: " + description ] : []).join(", ")).trim().length ? DEFAULT_ERROR_MESSAGE : message;
+                                    }
+                                    throw new Error(message);
+                                }
                             }));
                         }({
                             ThreeDomainSecure: ThreeDomainSecure,
@@ -6283,6 +6303,7 @@ window.spb = function(modules) {
             var fundingSource = _ref5.fundingSource;
             return !(isIos() || isAndroid() || fundingSource && "venmo" !== fundingSource);
         }
+        var constants = __webpack_require__("./server/components/native/constants.js");
         function getNativeDomain(_ref) {
             var props = _ref.props;
             var env = props.env;
@@ -6403,7 +6424,7 @@ window.spb = function(modules) {
             var forceEligible = isNativeOptedIn({
                 props: props
             });
-            var channel = isDevice() ? "mobile-web" : "desktop-web";
+            var channel = isDevice() ? constants.CHANNEL.MOBILE : constants.CHANNEL.DESKTOP;
             if (!firebase) throw new Error("Can not find firebase config");
             var queryParams = {
                 channel: channel,
@@ -6428,7 +6449,7 @@ window.spb = function(modules) {
                 buyerCountry: buyerCountry,
                 sdkVersion: sdkVersion
             };
-            "desktop-web" === queryParams.channel && delete queryParams.sdkMeta;
+            queryParams.channel === constants.CHANNEL.DESKTOP && delete queryParams.sdkMeta;
             return queryParams;
         }
         function getNativeUrl(_ref5) {
@@ -7037,7 +7058,7 @@ window.spb = function(modules) {
                                     buttonSessionID: buttonSessionID,
                                     buyerCountry: buyerCountry,
                                     clientID: clientID,
-                                    channel: isDevice() ? "mobile-web" : "desktop-web",
+                                    channel: isDevice() ? constants.CHANNEL.MOBILE : constants.CHANNEL.DESKTOP,
                                     env: env,
                                     parentDomain: parentDomain,
                                     sdkCorrelationID: sdkCorrelationID,

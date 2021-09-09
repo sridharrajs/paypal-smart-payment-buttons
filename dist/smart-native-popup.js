@@ -1130,6 +1130,9 @@
                 return !1;
             }
         };
+        var extendIfDefined = function(target, source) {
+            for (var key in source) source.hasOwnProperty(key) && source[key] && (target[key] = source[key]);
+        };
         function httpTransport(_ref) {
             var url = _ref.url, method = _ref.method, headers = _ref.headers, json = _ref.json, _ref$enableSendBeacon = _ref.enableSendBeacon, enableSendBeacon = void 0 !== _ref$enableSendBeacon && _ref$enableSendBeacon;
             return promise_ZalgoPromise.try((function() {
@@ -1217,9 +1220,6 @@
                     json: json
                 });
             })).then(src_util_noop);
-        }
-        function extendIfDefined(target, source) {
-            for (var key in source) source.hasOwnProperty(key) && source[key] && !target[key] && (target[key] = source[key]);
         }
         var _FUNDING_SKIP_LOGIN, _AMPLITUDE_API_KEY;
         (_FUNDING_SKIP_LOGIN = {}).paypal = "paypal", _FUNDING_SKIP_LOGIN.paylater = "paypal", 

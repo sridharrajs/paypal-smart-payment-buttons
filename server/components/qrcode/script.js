@@ -1,63 +1,82 @@
-/* @flow */
+"use strict";
 
-import { join } from 'path';
-import { readFileSync } from 'fs';
+exports.__esModule = true;
+exports.compileLocalSmartQRCodeClientScript = compileLocalSmartQRCodeClientScript;
+exports.getSmartQRCodeClientScript = getSmartQRCodeClientScript;
 
-import { noop } from 'belter';
-import { ENV } from '@paypal/sdk-constants';
+var _path = require("path");
 
-import type { CacheType, InstanceLocationInformation } from '../../types';
-import { QRCODE_CLIENT_JS, QRCODE_CLIENT_MIN_JS, WEBPACK_CONFIG, ACTIVE_TAG, SMART_BUTTONS_MODULE } from '../../config';
-import { isLocalOrTest, compileWebpack, babelRequire, resolveScript, type LoggerBufferType } from '../../lib';
-import { getPayPalSmartPaymentButtonsWatcher } from '../../watchers';
+var _fs = require("fs");
 
-const ROOT = join(__dirname, '../../..');
+var _belter = require("belter");
 
-type SmartQRCodeClientScript = {|
-    script : string,
-    version : string
-|};
+var _sdkConstants = require("@paypal/sdk-constants");
 
-export async function compileLocalSmartQRCodeClientScript() : Promise<?SmartQRCodeClientScript> {
-    const webpackScriptPath = resolveScript(join(ROOT, WEBPACK_CONFIG));
+var _config = require("../../config");
 
-    if (webpackScriptPath && isLocalOrTest()) {
-        const { WEBPACK_CONFIG_QRCODE_DEBUG } = babelRequire(webpackScriptPath);
-        const script = await compileWebpack(WEBPACK_CONFIG_QRCODE_DEBUG, ROOT);
-        return { script, version: ENV.LOCAL };
-    }
+var _lib = require("../../lib");
 
-    const distScriptPath = resolveScript(join(SMART_BUTTONS_MODULE, QRCODE_CLIENT_JS));
+var _watchers = require("../../watchers");
 
-    if (distScriptPath) {
-        const script = readFileSync(distScriptPath).toString();
-        return { script, version: ENV.LOCAL };
-    }
+const ROOT = (0, _path.join)(__dirname, '../../..');
+
+async function compileLocalSmartQRCodeClientScript() {
+  const webpackScriptPath = (0, _lib.resolveScript)((0, _path.join)(ROOT, _config.WEBPACK_CONFIG));
+
+  if (webpackScriptPath && (0, _lib.isLocalOrTest)()) {
+    const {
+      WEBPACK_CONFIG_QRCODE_DEBUG
+    } = (0, _lib.babelRequire)(webpackScriptPath);
+    const script = await (0, _lib.compileWebpack)(WEBPACK_CONFIG_QRCODE_DEBUG, ROOT);
+    return {
+      script,
+      version: _sdkConstants.ENV.LOCAL
+    };
+  }
+
+  const distScriptPath = (0, _lib.resolveScript)((0, _path.join)(_config.SMART_BUTTONS_MODULE, _config.QRCODE_CLIENT_JS));
+
+  if (distScriptPath) {
+    const script = (0, _fs.readFileSync)(distScriptPath).toString();
+    return {
+      script,
+      version: _sdkConstants.ENV.LOCAL
+    };
+  }
 }
 
-type GetSmartQRCodeClientScriptOptions = {|
-    debug : boolean,
-    logBuffer : ?LoggerBufferType,
-    cache : ?CacheType,
-    useLocal? : boolean,
-    locationInformation : InstanceLocationInformation
-|};
+async function getSmartQRCodeClientScript({
+  logBuffer,
+  cache,
+  debug = false,
+  useLocal = (0, _lib.isLocalOrTest)(),
+  locationInformation
+} = {}) {
+  if (useLocal) {
+    const script = await compileLocalSmartQRCodeClientScript();
 
-export async function getSmartQRCodeClientScript({ logBuffer, cache, debug = false, useLocal = isLocalOrTest(), locationInformation } : GetSmartQRCodeClientScriptOptions = {}) : Promise<SmartQRCodeClientScript> {
-    if (useLocal) {
-        const script = await compileLocalSmartQRCodeClientScript();
-
-        if (script) {
-            return script;
-        }
+    if (script) {
+      return script;
     }
+  }
 
-    const { getTag, getDeployTag, read } = getPayPalSmartPaymentButtonsWatcher({ logBuffer, cache, locationInformation });
-    const { version } = await getTag();
-    const script = await read(debug ? QRCODE_CLIENT_JS : QRCODE_CLIENT_MIN_JS, ACTIVE_TAG);
+  const {
+    getTag,
+    getDeployTag,
+    read
+  } = (0, _watchers.getPayPalSmartPaymentButtonsWatcher)({
+    logBuffer,
+    cache,
+    locationInformation
+  });
+  const {
+    version
+  } = await getTag();
+  const script = await read(debug ? _config.QRCODE_CLIENT_JS : _config.QRCODE_CLIENT_MIN_JS, _config.ACTIVE_TAG); // non-blocking download of the DEPLOY_TAG
 
-    // non-blocking download of the DEPLOY_TAG
-    getDeployTag().catch(noop);
-
-    return { script, version };
+  getDeployTag().catch(_belter.noop);
+  return {
+    script,
+    version
+  };
 }
