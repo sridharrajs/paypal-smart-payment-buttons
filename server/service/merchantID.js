@@ -1,17 +1,16 @@
-/* @flow */
+"use strict";
 
-import type { ExpressRequest } from '../types';
+exports.__esModule = true;
+exports.resolveMerchantID = resolveMerchantID;
 
-type ResolveMerchantIDOptions = {|
-    merchantID : ?$ReadOnlyArray<string>,
-    facilitatorAccessToken : string,
-    getMerchantID : (ExpressRequest, string) => Promise<string>
-|};
+async function resolveMerchantID(req, {
+  merchantID,
+  getMerchantID,
+  facilitatorAccessToken
+}) {
+  if (merchantID) {
+    return merchantID;
+  }
 
-export async function resolveMerchantID(req : ExpressRequest, { merchantID, getMerchantID, facilitatorAccessToken } : ResolveMerchantIDOptions) : Promise<$ReadOnlyArray<string>> {
-    if (merchantID) {
-        return merchantID;
-    }
-
-    return [ await getMerchantID(req, facilitatorAccessToken) ];
+  return [await getMerchantID(req, facilitatorAccessToken)];
 }

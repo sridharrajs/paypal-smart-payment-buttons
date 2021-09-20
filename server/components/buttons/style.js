@@ -1,6 +1,8 @@
-/* @flow */
+"use strict";
 
-export const buttonStyle = `
+exports.__esModule = true;
+exports.buttonStyle = void 0;
+const buttonStyle = `
     .buttons-container {
         transition: all 0.3s ease-in-out;
     }
@@ -16,3 +18,4 @@ export const buttonStyle = `
         box-shadow: none !important;
     }
 `;
+exports.buttonStyle = buttonStyle;
