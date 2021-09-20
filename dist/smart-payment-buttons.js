@@ -939,6 +939,15 @@ window.spb = function(modules) {
     "./node_modules/@paypal/sdk-constants/index.js": function(module, exports, __webpack_require__) {
         module.exports = __webpack_require__("./node_modules/@paypal/sdk-constants/dist/paypal-sdk-constants.js");
     },
+    "./server/components/native/constants.js": function(module, exports, __webpack_require__) {
+        "use strict";
+        exports.__esModule = !0;
+        exports.CHANNEL = void 0;
+        exports.CHANNEL = {
+            DESKTOP: "desktop-web",
+            MOBILE: "mobile-web"
+        };
+    },
     "./src/button/index.js": function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         __webpack_require__.r(__webpack_exports__);
@@ -1944,9 +1953,16 @@ window.spb = function(modules) {
                     return item;
                 },
                 register: function(method) {
-                    cleaned ? method(cleanErr) : tasks.push(once((function() {
+                    var task = once((function() {
                         return method(cleanErr);
-                    })));
+                    }));
+                    cleaned ? method(cleanErr) : tasks.push(task);
+                    return {
+                        cancel: function() {
+                            var index = tasks.indexOf(task);
+                            -1 !== index && tasks.splice(index, 1);
+                        }
+                    };
                 },
                 all: function(err) {
                     cleanErr = err;
@@ -2509,7 +2525,7 @@ window.spb = function(modules) {
             }
         };
         var extendIfDefined = function(target, source) {
-            for (var key in source) source.hasOwnProperty(key) && source[key] && (target[key] = source[key]);
+            for (var key in source) source.hasOwnProperty(key) && (target[key] = source[key]);
         };
         function httpTransport(_ref) {
             var url = _ref.url, method = _ref.method, headers = _ref.headers, json = _ref.json, _ref$enableSendBeacon = _ref.enableSendBeacon, enableSendBeacon = void 0 !== _ref$enableSendBeacon && _ref$enableSendBeacon;
@@ -3042,7 +3058,7 @@ window.spb = function(modules) {
             logger_getLogger().info("rest_api_create_order_token");
             var headers = ((_headers15 = {}).authorization = "Bearer " + accessToken, _headers15["paypal-partner-attribution-id"] = partnerAttributionID, 
             _headers15["paypal-client-metadata-id"] = clientMetadataID, _headers15["x-app-name"] = "smart-payment-buttons", 
-            _headers15["x-app-version"] = "5.0.60", _headers15);
+            _headers15["x-app-version"] = "5.0.61", _headers15);
             var paymentSource = {
                 token: {
                     id: paymentMethodID,
@@ -5833,7 +5849,16 @@ window.spb = function(modules) {
                                     createOrder: createOrder,
                                     getParent: getParent
                                 });
-                                if (200 !== status) throw new Error("Validate payment failed with status: " + status);
+                                if (200 !== status) {
+                                    var DEFAULT_ERROR_MESSAGE = "Validate payment failed with status: " + status;
+                                    var message = DEFAULT_ERROR_MESSAGE;
+                                    if (Array.isArray(body.details)) {
+                                        var _body$details$ = body.details[0];
+                                        var issue = (_body$details$ = void 0 === _body$details$ ? {} : _body$details$).issue, description = _body$details$.description;
+                                        message = 0 === (message = [].concat(issue ? [ "Code: " + issue ] : [], description ? [ "Description: " + description ] : []).join(", ")).trim().length ? DEFAULT_ERROR_MESSAGE : message;
+                                    }
+                                    throw new Error(message);
+                                }
                             }));
                         }({
                             ThreeDomainSecure: ThreeDomainSecure,
@@ -6440,6 +6465,7 @@ window.spb = function(modules) {
             var fundingSource = _ref5.fundingSource;
             return !(isIos() || isAndroid() || fundingSource && "venmo" !== fundingSource);
         }
+        var constants = __webpack_require__("./server/components/native/constants.js");
         function getNativeDomain(_ref) {
             var props = _ref.props;
             var env = props.env;
@@ -6560,7 +6586,7 @@ window.spb = function(modules) {
             var forceEligible = isNativeOptedIn({
                 props: props
             });
-            var channel = isDevice() ? "mobile-web" : "desktop-web";
+            var channel = isDevice() ? constants.CHANNEL.MOBILE : constants.CHANNEL.DESKTOP;
             if (!firebase) throw new Error("Can not find firebase config");
             var queryParams = {
                 channel: channel,
@@ -6585,7 +6611,7 @@ window.spb = function(modules) {
                 buyerCountry: buyerCountry,
                 sdkVersion: sdkVersion
             };
-            "desktop-web" === queryParams.channel && delete queryParams.sdkMeta;
+            queryParams.channel === constants.CHANNEL.DESKTOP && delete queryParams.sdkMeta;
             return queryParams;
         }
         function getNativeUrl(_ref5) {
@@ -7224,7 +7250,7 @@ window.spb = function(modules) {
                                     buttonSessionID: buttonSessionID,
                                     buyerCountry: buyerCountry,
                                     clientID: clientID,
-                                    channel: isDevice() ? "mobile-web" : "desktop-web",
+                                    channel: isDevice() ? constants.CHANNEL.MOBILE : constants.CHANNEL.DESKTOP,
                                     env: env,
                                     parentDomain: parentDomain,
                                     sdkCorrelationID: sdkCorrelationID,
@@ -8995,7 +9021,7 @@ window.spb = function(modules) {
                     var _ref3;
                     return (_ref3 = {}).state_name = "smart_button", _ref3.context_type = "button_session_id", 
                     _ref3.context_id = buttonSessionID, _ref3.state_name = "smart_button", _ref3.button_session_id = buttonSessionID, 
-                    _ref3.button_version = "5.0.60", _ref3.button_correlation_id = buttonCorrelationID, 
+                    _ref3.button_version = "5.0.61", _ref3.button_correlation_id = buttonCorrelationID, 
                     _ref3.stickiness_id = isAndroidChrome() ? stickinessID : null, _ref3.bn_code = partnerAttributionID, 
                     _ref3.user_action = commit ? "commit" : "continue", _ref3.seller_id = merchantID[0], 
                     _ref3.merchant_domain = merchantDomain, _ref3.t = Date.now().toString(), _ref3.user_id = buttonSessionID, 

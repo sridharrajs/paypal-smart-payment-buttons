@@ -1131,7 +1131,7 @@
             }
         };
         var extendIfDefined = function(target, source) {
-            for (var key in source) source.hasOwnProperty(key) && source[key] && (target[key] = source[key]);
+            for (var key in source) source.hasOwnProperty(key) && (target[key] = source[key]);
         };
         function httpTransport(_ref) {
             var url = _ref.url, method = _ref.method, headers = _ref.headers, json = _ref.json, _ref$enableSendBeacon = _ref.enableSendBeacon, enableSendBeacon = void 0 !== _ref$enableSendBeacon && _ref$enableSendBeacon;
@@ -1508,7 +1508,7 @@
                 logger.addTrackingBuilder((function() {
                     var _ref3;
                     return (_ref3 = {}).state_name = "smart_button", _ref3.context_type = "button_session_id", 
-                    _ref3.context_id = buttonSessionID, _ref3.button_session_id = buttonSessionID, _ref3.button_version = "5.0.60", 
+                    _ref3.context_id = buttonSessionID, _ref3.button_session_id = buttonSessionID, _ref3.button_version = "5.0.61", 
                     _ref3.user_id = buttonSessionID, _ref3;
                 }));
                 (function() {
@@ -1679,7 +1679,7 @@
                     return item;
                 },
                 register: function(method) {
-                    cleaned ? method(cleanErr) : tasks.push(function(method) {
+                    var task = function(method) {
                         var called = !1;
                         return setFunctionName((function() {
                             if (!called) {
@@ -1689,7 +1689,14 @@
                         }), getFunctionName(method) + "::once");
                     }((function() {
                         return method(cleanErr);
-                    })));
+                    }));
+                    cleaned ? method(cleanErr) : tasks.push(task);
+                    return {
+                        cancel: function() {
+                            var index = tasks.indexOf(task);
+                            -1 !== index && tasks.splice(index, 1);
+                        }
+                    };
                 },
                 all: function(err) {
                     cleanErr = err;
