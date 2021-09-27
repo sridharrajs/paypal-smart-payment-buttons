@@ -345,7 +345,11 @@ const VALIDATE_CONTINGENCIES = {
 export type ValidatePaymentMethodResponse = {|
     links? : $ReadOnlyArray<{|
         rel : string
-    |}>
+    |}>,
+    details? : $ReadOnlyArray<{
+        issue? : string,
+        description? : string
+    }>
 |};
 
 type PaymentSource = {|
@@ -681,7 +685,7 @@ export type DetailedOrderInfo = {|
                     currencyValue : string,
                     currencyCode : $Values<typeof CURRENCY>
                 |},
-                
+
                 subtotal : {|
                     currencyFormatSymbolISOCurrency : string,
                     currencyValue : string,
