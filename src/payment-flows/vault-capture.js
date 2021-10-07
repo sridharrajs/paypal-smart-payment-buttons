@@ -106,7 +106,7 @@ function handleValidateResponse({ ThreeDomainSecure, status, body, createOrder, 
                 const { issue, description } = details || {};
 
                 message = [
-                    ...(issue ? [ `Code: ${ issue }` ] : []),
+                    ...(issue ? [ `issue:${ issue }` ] : []),
                     ...(description ? [ `Description: ${ description }` ] : [])
                 ].join(', ');
                 message = message.trim().length === 0 ? DEFAULT_ERROR_MESSAGE : message;
