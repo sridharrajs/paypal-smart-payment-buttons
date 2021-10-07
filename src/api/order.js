@@ -346,10 +346,10 @@ export type ValidatePaymentMethodResponse = {|
     links? : $ReadOnlyArray<{|
         rel : string
     |}>,
-    details? : $ReadOnlyArray<{
+    details? : $ReadOnlyArray<{|
         issue? : string,
         description? : string
-    }>
+    |}>
 |};
 
 type PaymentSource = {|
