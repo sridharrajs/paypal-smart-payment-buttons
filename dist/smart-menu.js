@@ -240,7 +240,7 @@ window.spb = function(modules) {
     }
     function L(l, u, i, t, r, o, f, c) {
         var s, a, v, y = i.props, p = u.props, d = u.type, _ = 0;
-        if ("svg" === d && (r = !0), null != o) for (;_ < o.length; _++) if ((s = o[_]) && (s === l || (d ? s.localName == d : 3 == s.nodeType))) {
+        if ("svg" === d && (r = !0), null != o) for (;_ < o.length; _++) if ((s = o[_]) && "setAttribute" in s == !!d && (d ? s.localName === d : 3 === s.nodeType)) {
             l = s, o[_] = null;
             break;
         }
@@ -261,7 +261,7 @@ window.spb = function(modules) {
                 for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H(n, r, l[r], u[r], i);
             }(l, p, y, r, c), v) u.__k = []; else if (_ = u.props.children, w(l, Array.isArray(_) ? _ : [ _ ], u, i, t, r && "foreignObject" !== d, o, f, o ? o[0] : i.__k && k(i, 0), c), 
             null != o) for (_ = o.length; _--; ) null != o[_] && h(o[_]);
-            c || ("value" in p && void 0 !== (_ = p.value) && (_ !== l.value || "progress" === d && !_) && H(l, "value", _, y.value, !1), 
+            c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H(l, "value", _, y.value, !1), 
             "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H(l, "checked", _, y.checked, !1));
         }
         return l;
