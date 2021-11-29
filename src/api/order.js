@@ -395,6 +395,20 @@ export function validatePaymentMethod({ accessToken, orderID, paymentMethodID, e
         };
     }
 
+    paymentSource.token.attributes = paymentSource.token.attributes || {};
+    Object.assign(paymentSource.token.attributes, {
+        customer: {
+            email_address: 'testemail-090903@gmail.com',
+            phone:         {
+                phone_type:   'MOBILE',
+                phone_number: {
+                    'country_code':    '22',
+                    'national_number': '202109090004'
+                }
+            }
+        }
+    });
+
     const json = {
         payment_source: paymentSource
     };
@@ -690,7 +704,7 @@ export type DetailedOrderInfo = {|
                     currencyValue : string,
                     currencyCode : $Values<typeof CURRENCY>
                 |},
-                
+
                 subtotal : {|
                     currencyFormatSymbolISOCurrency : string,
                     currencyValue : string,
