@@ -1,49 +1,34 @@
-/* @flow */
+"use strict";
 
-import { ENV, DEFAULT_COUNTRY, COUNTRY_LANGS } from '@paypal/sdk-constants';
+exports.__esModule = true;
+exports.getParams = getParams;
 
-import type { ExpressRequest, ExpressResponse, LocaleType } from '../../types';
-import { getCSPNonce } from '../../lib';
+var _sdkConstants = require("@paypal/sdk-constants");
 
-type ParamsType = {|
-    env : $Values<typeof ENV>,
-    qrPath : string,
-    demo? : boolean,
-    locale? : LocaleType,
-    debug? : boolean
-|};
+var _lib = require("../../lib");
 
-type RequestParams = {|
-    env : $Values<typeof ENV>,
-    cspNonce : string,
-    qrPath : string,
-    demo : boolean,
-    locale : LocaleType,
-    debug : boolean
-|};
-
-export function getParams(params : ParamsType, req : ExpressRequest, res : ExpressResponse) : RequestParams {
-    const {
-        env,
-        qrPath,
-        demo,
-        locale = {},
-        debug = false
-    } = params;
-
-    const {
-        country = DEFAULT_COUNTRY,
-        lang = COUNTRY_LANGS[country][0]
-    } = locale;
-
-    const cspNonce = getCSPNonce(res);
-
-    return {
-        env,
-        cspNonce,
-        qrPath,
-        demo:   Boolean(demo),
-        debug:  Boolean(debug),
-        locale: { country, lang }
-    };
+function getParams(params, req, res) {
+  const {
+    env,
+    qrPath,
+    demo,
+    locale = {},
+    debug = false
+  } = params;
+  const {
+    country = _sdkConstants.DEFAULT_COUNTRY,
+    lang = _sdkConstants.COUNTRY_LANGS[country][0]
+  } = locale;
+  const cspNonce = (0, _lib.getCSPNonce)(res);
+  return {
+    env,
+    cspNonce,
+    qrPath,
+    demo: Boolean(demo),
+    debug: Boolean(debug),
+    locale: {
+      country,
+      lang
+    }
+  };
 }
