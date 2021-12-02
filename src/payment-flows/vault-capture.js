@@ -109,7 +109,7 @@ function getClientMetadataID({ props } : {| props : ButtonProps |}) : string {
 
 function initVaultCapture({ props, components, payment, serviceData, config } : InitOptions) : PaymentFlowInstance {
     const { createOrder, onApprove, clientAccessToken,
-        enableThreeDomainSecure, partnerAttributionID, getParent, userIDToken, clientID, env } = props;
+        enableThreeDomainSecure, partnerAttributionID, getParent, userIDToken, clientID, env, buyer } = props;
     const { ThreeDomainSecure, Installments } = components;
     const { fundingSource, paymentMethodID, button } = payment;
     const { facilitatorAccessToken, buyerCountry } = serviceData;
@@ -154,7 +154,7 @@ function initVaultCapture({ props, components, payment, serviceData, config } : 
 
     const startPaymentFlow = (orderID, installmentPlan) => {
         return ZalgoPromise.hash({
-            validate:        validatePaymentMethod({ accessToken, orderID, paymentMethodID, enableThreeDomainSecure, clientMetadataID, partnerAttributionID, installmentPlan }),
+            validate:        validatePaymentMethod({ accessToken, orderID, paymentMethodID, enableThreeDomainSecure, clientMetadataID, partnerAttributionID, installmentPlan, buyer }),
             requireShipping: shippingRequired(orderID)
         }).then(({ validate, requireShipping }) => {
             if (requireShipping) {

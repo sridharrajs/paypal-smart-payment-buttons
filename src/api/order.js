@@ -334,6 +334,16 @@ export type ValidatePaymentMethodOptions = {|
     enableThreeDomainSecure : boolean,
     partnerAttributionID : ?string,
     clientMetadataID : string,
+    buyer? : {|
+        email_address : string,
+        phone : {|
+            phone_type : string,
+            phone_number : {|
+                country_code : string,
+                national_number : string
+            |}
+        |}
+    |},
     installmentPlan? : {|
         term : string,
         interval_duration : string
@@ -355,6 +365,16 @@ type PaymentSource = {|
         id : string,
         type : 'NONCE',
         attributes? : {|
+            customer? : {|
+                email_address : string,
+                phone : {|
+                    phone_type : string,
+                    phone_number : {|
+                        country_code : string,
+                        national_number : string
+                    |}
+                |}
+            |},
             installments? : {|
                 term : string,
                 interval_duration : string
@@ -364,7 +384,7 @@ type PaymentSource = {|
     contingencies? : $ReadOnlyArray<$Values<typeof VALIDATE_CONTINGENCIES>>
 |};
 
-export function validatePaymentMethod({ accessToken, orderID, paymentMethodID, enableThreeDomainSecure, partnerAttributionID, clientMetadataID, installmentPlan } : ValidatePaymentMethodOptions) : ZalgoPromise<{| status : number, body : ValidatePaymentMethodResponse, headers : { [string] : string } |}> {
+export function validatePaymentMethod({ accessToken, orderID, paymentMethodID, enableThreeDomainSecure, partnerAttributionID, clientMetadataID, installmentPlan, buyer } : ValidatePaymentMethodOptions) : ZalgoPromise<{| status : number, body : ValidatePaymentMethodResponse, headers : { [string] : string } |}> {
     getLogger().info(`rest_api_create_order_token`);
 
     const headers : Object = {
@@ -395,19 +415,12 @@ export function validatePaymentMethod({ accessToken, orderID, paymentMethodID, e
         };
     }
 
-    paymentSource.token.attributes = paymentSource.token.attributes || {};
-    Object.assign(paymentSource.token.attributes, {
-        customer: {
-            email_address: 'testemail-090903@gmail.com',
-            phone:         {
-                phone_type:   'MOBILE',
-                phone_number: {
-                    'country_code':    '22',
-                    'national_number': '202109090004'
-                }
-            }
-        }
-    });
+    if (buyer) {
+        paymentSource.token.attributes = paymentSource.token.attributes || {};
+        Object.assign(paymentSource.token.attributes, {
+            customer: buyer
+        });
+    }
 
     const json = {
         payment_source: paymentSource

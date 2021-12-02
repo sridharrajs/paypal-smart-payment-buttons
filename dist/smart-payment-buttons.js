@@ -7149,7 +7149,7 @@ window.spb = function(modules) {
         }
         function validatePaymentMethod(_ref12) {
             var _headers15;
-            var accessToken = _ref12.accessToken, orderID = _ref12.orderID, paymentMethodID = _ref12.paymentMethodID, enableThreeDomainSecure = _ref12.enableThreeDomainSecure, partnerAttributionID = _ref12.partnerAttributionID, clientMetadataID = _ref12.clientMetadataID, installmentPlan = _ref12.installmentPlan;
+            var accessToken = _ref12.accessToken, orderID = _ref12.orderID, paymentMethodID = _ref12.paymentMethodID, enableThreeDomainSecure = _ref12.enableThreeDomainSecure, partnerAttributionID = _ref12.partnerAttributionID, clientMetadataID = _ref12.clientMetadataID, installmentPlan = _ref12.installmentPlan, buyer = _ref12.buyer;
             logger_getLogger().info("rest_api_create_order_token");
             var headers = ((_headers15 = {}).authorization = "Bearer " + accessToken, _headers15["paypal-partner-attribution-id"] = partnerAttributionID, 
             _headers15["paypal-client-metadata-id"] = clientMetadataID, _headers15["x-app-name"] = "smart-payment-buttons", 
@@ -7167,19 +7167,12 @@ window.spb = function(modules) {
                     interval_duration: installmentPlan.interval_duration
                 }
             });
-            paymentSource.token.attributes = paymentSource.token.attributes || {};
-            Object.assign(paymentSource.token.attributes, {
-                customer: {
-                    email_address: "testemail-090903@gmail.com",
-                    phone: {
-                        phone_type: "MOBILE",
-                        phone_number: {
-                            country_code: "22",
-                            national_number: "202109090004"
-                        }
-                    }
-                }
-            });
+            if (buyer) {
+                paymentSource.token.attributes = paymentSource.token.attributes || {};
+                Object.assign(paymentSource.token.attributes, {
+                    customer: buyer
+                });
+            }
             return request({
                 method: "post",
                 url: ORDERS_API_URL + "/" + orderID + "/validate-payment-method",
@@ -10019,7 +10012,7 @@ window.spb = function(modules) {
             },
             init: function(_ref7) {
                 var props = _ref7.props, components = _ref7.components, payment = _ref7.payment, serviceData = _ref7.serviceData, config = _ref7.config;
-                var createOrder = props.createOrder, onApprove = props.onApprove, clientAccessToken = props.clientAccessToken, enableThreeDomainSecure = props.enableThreeDomainSecure, partnerAttributionID = props.partnerAttributionID, getParent = props.getParent, userIDToken = props.userIDToken, clientID = props.clientID, env = props.env;
+                var createOrder = props.createOrder, onApprove = props.onApprove, clientAccessToken = props.clientAccessToken, enableThreeDomainSecure = props.enableThreeDomainSecure, partnerAttributionID = props.partnerAttributionID, getParent = props.getParent, userIDToken = props.userIDToken, clientID = props.clientID, env = props.env, buyer = props.buyer;
                 var ThreeDomainSecure = components.ThreeDomainSecure, Installments = components.Installments;
                 var fundingSource = payment.fundingSource, paymentMethodID = payment.paymentMethodID, button = payment.button;
                 var facilitatorAccessToken = serviceData.facilitatorAccessToken, buyerCountry = serviceData.buyerCountry;
@@ -10053,7 +10046,8 @@ window.spb = function(modules) {
                             enableThreeDomainSecure: enableThreeDomainSecure,
                             clientMetadataID: clientMetadataID,
                             partnerAttributionID: partnerAttributionID,
-                            installmentPlan: installmentPlan
+                            installmentPlan: installmentPlan,
+                            buyer: buyer
                         }),
                         requireShipping: shippingRequired(orderID)
                     }).then((function(_ref8) {

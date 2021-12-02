@@ -53,7 +53,7 @@ export type XProps = {|
 
     clientAccessToken : ?string,
     buyerCountry : $Values<typeof COUNTRY>,
-    buyer : {|
+    buyer? : {|
         email_address : string,
         phone : {|
             phone_type : string,
@@ -126,7 +126,7 @@ export type Props = {|
     wallet : Wallet,
 
     clientAccessToken : ?string,
-    buyer : {|
+    buyer? : {|
         email_address : string,
         phone : {|
             phone_type : string,
