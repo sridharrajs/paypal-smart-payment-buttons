@@ -40,7 +40,11 @@ var _belter = require("belter");
 
 var _config = require("../config");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}
 
 function response(res, status, type, message) {
   res.status(status).header(_config.HTTP_HEADER.CONTENT_TYPE, type).header(_config.HTTP_HEADER.CONTENT_DISPOSITION, _config.HTTP_CONTENT_DISPOSITION.INLINE).send(message);

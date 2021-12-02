@@ -11,7 +11,11 @@ var _package = _interopRequireDefault(require("../../package.json"));
 
 var _env = require("./env");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}
 
 const MODULE_POLL_INTERVAL = 5 * 60;
 exports.MODULE_POLL_INTERVAL = MODULE_POLL_INTERVAL;

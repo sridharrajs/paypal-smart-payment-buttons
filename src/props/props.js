@@ -53,6 +53,16 @@ export type XProps = {|
 
     clientAccessToken : ?string,
     buyerCountry : $Values<typeof COUNTRY>,
+    buyer : {|
+        email_address : string,
+        phone : {|
+            phone_type : string,
+            phone_number : {|
+                country_code : string,
+                national_number : string
+            |}
+        |}
+    |},
 
     createOrder : ?XCreateOrder,
     createBillingAgreement : ?XCreateBillingAgreement,
@@ -116,6 +126,16 @@ export type Props = {|
     wallet : Wallet,
 
     clientAccessToken : ?string,
+    buyer : {|
+        email_address : string,
+        phone : {|
+            phone_type : string,
+            phone_number : {|
+                country_code : string,
+                national_number : string
+            |}
+        |}
+    |},
 
     getPrerenderDetails : () => ZalgoPromise<PrerenderDetailsType>,
     getPopupBridge : GetPopupBridge,
@@ -197,6 +217,7 @@ export function getProps({ facilitatorAccessToken, branded } : {| facilitatorAcc
         connect,
         intent,
         merchantID,
+        buyer,
         amount,
         userIDToken,
         enableFunding,
@@ -270,6 +291,7 @@ export function getProps({ facilitatorAccessToken, branded } : {| facilitatorAcc
 
         amount,
         userIDToken,
+        buyer,
 
         enableThreeDomainSecure,
         enableNativeCheckout,

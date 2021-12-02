@@ -8,8 +8,9 @@ var _webpack = require("grumbler-scripts/config/webpack.config");
 var _globals = require("./globals");
 
 var _globals2 = require("./test/globals");
-
 /* eslint import/no-nodejs-modules: off, import/no-default-export: off */
+
+
 function getSmartWebpackConfig({
   entry,
   env,

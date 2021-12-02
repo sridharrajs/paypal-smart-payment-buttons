@@ -2,9 +2,9 @@
 
 var _belter = require("belter");
 
-var _script = require("./script");
+var _script = require("./script"); // $FlowFixMe
 
-// $FlowFixMe
+
 jest.setTimeout(30000);
 const cache = {
   // eslint-disable-next-line no-unused-vars

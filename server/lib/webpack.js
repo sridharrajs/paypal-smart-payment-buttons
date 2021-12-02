@@ -5,9 +5,14 @@ exports.getWebpackDevScript = getWebpackDevScript;
 
 var _isObject = _interopRequireDefault(require("is-object"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    default: obj
+  };
+}
 /* eslint no-sync: off */
+
+
 function normalizeAssets(assets) {
   if ((0, _isObject.default)(assets)) {
     // $FlowFixMe

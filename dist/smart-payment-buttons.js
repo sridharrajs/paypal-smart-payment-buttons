@@ -4855,6 +4855,15 @@ window.spb = function(modules) {
             }(cardNumber, pattern);
         };
     },
+    "./server/components/native/constants.js": function(module, exports, __webpack_require__) {
+        "use strict";
+        exports.__esModule = !0;
+        exports.CHANNEL = void 0;
+        exports.CHANNEL = {
+            DESKTOP: "desktop-web",
+            MOBILE: "mobile-web"
+        };
+    },
     "./src/button/index.js": function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         __webpack_require__.r(__webpack_exports__);
@@ -7513,7 +7522,7 @@ window.spb = function(modules) {
         function getProps(_ref) {
             var facilitatorAccessToken = _ref.facilitatorAccessToken, branded = _ref.branded;
             var xprops = window.xprops;
-            var uid = xprops.uid, env = xprops.env, _xprops$vault = xprops.vault, vault = void 0 !== _xprops$vault && _xprops$vault, commit = xprops.commit, locale = xprops.locale, platform = xprops.platform, sessionID = xprops.sessionID, clientID = xprops.clientID, partnerAttributionID = xprops.partnerAttributionID, clientMetadataID = xprops.clientMetadataID, sdkCorrelationID = xprops.sdkCorrelationID, getParentDomain = xprops.getParentDomain, clientAccessToken = xprops.clientAccessToken, getPopupBridge = xprops.getPopupBridge, getPrerenderDetails = xprops.getPrerenderDetails, getPageUrl = xprops.getPageUrl, enableThreeDomainSecure = xprops.enableThreeDomainSecure, enableVaultInstallments = xprops.enableVaultInstallments, _xprops$enableNativeC = xprops.enableNativeCheckout, enableNativeCheckout = void 0 !== _xprops$enableNativeC && _xprops$enableNativeC, rememberFunding = xprops.remember, stageHost = xprops.stageHost, apiStageHost = xprops.apiStageHost, getParent = xprops.getParent, fundingSource = xprops.fundingSource, currency = xprops.currency, connect = xprops.connect, intent = xprops.intent, merchantID = xprops.merchantID, amount = xprops.amount, userIDToken = xprops.userIDToken, enableFunding = xprops.enableFunding, disableFunding = xprops.disableFunding, disableCard = xprops.disableCard, wallet = xprops.wallet, _xprops$paymentMethod = xprops.paymentMethodToken, paymentMethodToken = void 0 === _xprops$paymentMethod ? xprops.paymentMethodNonce : _xprops$paymentMethod, _xprops$getQueriedEli = xprops.getQueriedEligibleFunding, getQueriedEligibleFunding = void 0 === _xprops$getQueriedEli ? function() {
+            var uid = xprops.uid, env = xprops.env, _xprops$vault = xprops.vault, vault = void 0 !== _xprops$vault && _xprops$vault, commit = xprops.commit, locale = xprops.locale, platform = xprops.platform, sessionID = xprops.sessionID, clientID = xprops.clientID, partnerAttributionID = xprops.partnerAttributionID, clientMetadataID = xprops.clientMetadataID, sdkCorrelationID = xprops.sdkCorrelationID, getParentDomain = xprops.getParentDomain, clientAccessToken = xprops.clientAccessToken, getPopupBridge = xprops.getPopupBridge, getPrerenderDetails = xprops.getPrerenderDetails, getPageUrl = xprops.getPageUrl, enableThreeDomainSecure = xprops.enableThreeDomainSecure, enableVaultInstallments = xprops.enableVaultInstallments, _xprops$enableNativeC = xprops.enableNativeCheckout, enableNativeCheckout = void 0 !== _xprops$enableNativeC && _xprops$enableNativeC, rememberFunding = xprops.remember, stageHost = xprops.stageHost, apiStageHost = xprops.apiStageHost, getParent = xprops.getParent, fundingSource = xprops.fundingSource, currency = xprops.currency, connect = xprops.connect, intent = xprops.intent, merchantID = xprops.merchantID, buyer = xprops.buyer, amount = xprops.amount, userIDToken = xprops.userIDToken, enableFunding = xprops.enableFunding, disableFunding = xprops.disableFunding, disableCard = xprops.disableCard, wallet = xprops.wallet, _xprops$paymentMethod = xprops.paymentMethodToken, paymentMethodToken = void 0 === _xprops$paymentMethod ? xprops.paymentMethodNonce : _xprops$paymentMethod, _xprops$getQueriedEli = xprops.getQueriedEligibleFunding, getQueriedEligibleFunding = void 0 === _xprops$getQueriedEli ? function() {
                 return promise_ZalgoPromise.resolve([]);
             } : _xprops$getQueriedEli, storageID = xprops.storageID, applePay = xprops.applePay, userExperienceFlow = xprops.userExperienceFlow, allowBillingPayments = xprops.allowBillingPayments;
             var onInit = function(_ref) {
@@ -8384,6 +8393,7 @@ window.spb = function(modules) {
                 getQueriedEligibleFunding: getQueriedEligibleFunding,
                 amount: amount,
                 userIDToken: userIDToken,
+                buyer: buyer,
                 enableThreeDomainSecure: enableThreeDomainSecure,
                 enableNativeCheckout: enableNativeCheckout,
                 enableVaultInstallments: enableVaultInstallments,
@@ -10021,6 +10031,7 @@ window.spb = function(modules) {
                     props: props
                 });
                 var accessToken = userIDToken ? facilitatorAccessToken : clientAccessToken;
+                console.log("props111new", props);
                 if (!paymentMethodID) throw new Error("Payment method id required for vault capture");
                 if (!accessToken) throw new Error("Client access token required for vault capture");
                 var restart = function() {
@@ -10297,6 +10308,7 @@ window.spb = function(modules) {
                 var clientAccessToken = props.clientAccessToken, createOrder = props.createOrder, enableThreeDomainSecure = props.enableThreeDomainSecure, partnerAttributionID = props.partnerAttributionID, sessionID = props.sessionID, clientMetadataID = props.clientMetadataID, userIDToken = props.userIDToken;
                 var fundingSource = payment.fundingSource, paymentMethodID = payment.paymentMethodID, button = payment.button;
                 var content = serviceData.content, facilitatorAccessToken = serviceData.facilitatorAccessToken;
+                console.log("props1233=>", props);
                 if (!clientAccessToken || !paymentMethodID) throw new Error("Client access token and payment method id required");
                 var updateMenuClientConfig = function() {
                     return promise_ZalgoPromise.try((function() {
@@ -10719,6 +10731,7 @@ window.spb = function(modules) {
             }
             return !1;
         }
+        var constants = __webpack_require__("./server/components/native/constants.js");
         function getNativeDomain(_ref) {
             var props = _ref.props;
             var env = props.env;
@@ -10839,7 +10852,7 @@ window.spb = function(modules) {
             var forceEligible = isNativeOptedIn({
                 props: props
             });
-            var channel = isDevice() ? "mobile-web" : "desktop-web";
+            var channel = isDevice() ? constants.CHANNEL.MOBILE : constants.CHANNEL.DESKTOP;
             if (!firebase) throw new Error("Can not find firebase config");
             var queryParams = {
                 channel: channel,
@@ -10864,7 +10877,7 @@ window.spb = function(modules) {
                 buyerCountry: buyerCountry,
                 sdkVersion: sdkVersion
             };
-            "desktop-web" === queryParams.channel && delete queryParams.sdkMeta;
+            queryParams.channel === constants.CHANNEL.DESKTOP && delete queryParams.sdkMeta;
             return queryParams;
         }
         function getNativeUrl(_ref5) {
@@ -11532,7 +11545,7 @@ window.spb = function(modules) {
                                     buttonSessionID: buttonSessionID,
                                     buyerCountry: buyerCountry,
                                     clientID: clientID,
-                                    channel: isDevice() ? "mobile-web" : "desktop-web",
+                                    channel: isDevice() ? constants.CHANNEL.MOBILE : constants.CHANNEL.DESKTOP,
                                     env: env,
                                     parentDomain: parentDomain,
                                     sdkCorrelationID: sdkCorrelationID,

@@ -68,7 +68,7 @@ type ThreeDomainSecureProps = {|
 |};
 
 function handleThreeDomainSecure({ ThreeDomainSecure, createOrder, getParent } : ThreeDomainSecureProps) : ZalgoPromise<void> {
-    
+
     const promise = new ZalgoPromise();
     const instance = ThreeDomainSecure({
         createOrder,
@@ -117,6 +117,9 @@ function initVaultCapture({ props, components, payment, serviceData, config } : 
 
     const clientMetadataID = getClientMetadataID({ props });
     const accessToken = userIDToken ? facilitatorAccessToken : clientAccessToken;
+
+    console.log('props111new', props);
+
 
     if (!paymentMethodID) {
         throw new Error(`Payment method id required for vault capture`);
@@ -173,7 +176,7 @@ function initVaultCapture({ props, components, payment, serviceData, config } : 
         return createOrder().then(orderID => {
             return loadFraudnet({ env, clientMetadataID, cspNonce }).catch(noop).then(() => {
                 const installmentsEligible = isVaultCaptureInstallmentsEligible({ props, serviceData });
-            
+
                 getLogger()
                     .info(installmentsEligible ? 'vault_merchant_installments_eligible' : 'vault_merchant_installments_ineligible')
                     .track({
@@ -210,6 +213,7 @@ function setupVaultMenu({ props, payment, serviceData, components, config, resta
     const { clientAccessToken, createOrder, enableThreeDomainSecure, partnerAttributionID, sessionID, clientMetadataID, userIDToken } = props;
     const { fundingSource, paymentMethodID, button } = payment;
     const { content, facilitatorAccessToken } = serviceData;
+    console.log('props1233=>', props);
 
     if (!clientAccessToken || !paymentMethodID) {
         throw new Error(`Client access token and payment method id required`);
@@ -248,7 +252,7 @@ function setupVaultMenu({ props, payment, serviceData, components, config, resta
                 [FPTI_KEY.TRANSITION]:      FPTI_TRANSITION.CLICK_CHOOSE_FUNDING,
                 [FPTI_KEY.OPTION_SELECTED]: FPTI_MENU_OPTION.CHOOSE_FUNDING
             }).flush();
-            
+
             return ZalgoPromise.try(() => {
                 return updateMenuClientConfig();
             }).then(() => {
