@@ -5765,15 +5765,15 @@ window.spb = function(modules) {
                 var payment = _ref2.payment;
                 return !(payment.win || !payment.paymentMethodID || window.innerWidth < 250 && "paypal" === payment.fundingSource);
             },
-            init: function(_ref7) {
-                var props = _ref7.props, components = _ref7.components, payment = _ref7.payment, serviceData = _ref7.serviceData, config = _ref7.config;
+            init: function(_ref8) {
+                var props = _ref8.props, components = _ref8.components, payment = _ref8.payment, serviceData = _ref8.serviceData, config = _ref8.config;
                 var createOrder = props.createOrder, onApprove = props.onApprove, clientAccessToken = props.clientAccessToken, enableThreeDomainSecure = props.enableThreeDomainSecure, partnerAttributionID = props.partnerAttributionID, getParent = props.getParent, userIDToken = props.userIDToken, clientID = props.clientID, env = props.env;
                 var ThreeDomainSecure = components.ThreeDomainSecure, Installments = components.Installments;
                 var fundingSource = payment.fundingSource, paymentMethodID = payment.paymentMethodID, button = payment.button;
                 var facilitatorAccessToken = serviceData.facilitatorAccessToken, buyerCountry = serviceData.buyerCountry;
                 var cspNonce = config.cspNonce;
-                var clientMetadataID = function(_ref6) {
-                    var props = _ref6.props;
+                var clientMetadataID = function(_ref7) {
+                    var props = _ref7.props;
                     return props.clientMetadataID || props.sessionID;
                 }({
                     props: props
@@ -5803,9 +5803,9 @@ window.spb = function(modules) {
                             installmentPlan: installmentPlan
                         }),
                         requireShipping: shippingRequired(orderID)
-                    }).then((function(_ref8) {
-                        var validate = _ref8.validate;
-                        if (_ref8.requireShipping) {
+                    }).then((function(_ref9) {
+                        var validate = _ref9.validate;
+                        if (_ref9.requireShipping) {
                             if ("paypal" !== fundingSource) throw new Error("Shipping address requested for " + fundingSource + " payment");
                             return function() {
                                 logger_getLogger().info("web_checkout_fallback").flush();
@@ -5850,14 +5850,11 @@ window.spb = function(modules) {
                                     getParent: getParent
                                 });
                                 if (200 !== status) {
-                                    var DEFAULT_ERROR_MESSAGE = "Validate payment failed with status: " + status;
-                                    var message = DEFAULT_ERROR_MESSAGE;
                                     if (Array.isArray(body.details)) {
-                                        var _body$details$ = body.details[0];
-                                        var issue = (_body$details$ = void 0 === _body$details$ ? {} : _body$details$).issue, description = _body$details$.description;
-                                        message = 0 === (message = [].concat(issue ? [ "Code: " + issue ] : [], description ? [ "Description: " + description ] : []).join(", ")).trim().length ? DEFAULT_ERROR_MESSAGE : message;
+                                        var _ref6$issue = (body.details && body.details[0] || {}).issue, issue = void 0 === _ref6$issue ? "" : _ref6$issue;
+                                        if (0 === issue.trim().length) throw new Error("Validate payment failed with issue: " + issue);
                                     }
-                                    throw new Error(message);
+                                    throw new Error("Validate payment failed with status: " + status);
                                 }
                             }));
                         }({
@@ -6058,8 +6055,8 @@ window.spb = function(modules) {
                     }
                 };
             },
-            setupMenu: function(_ref9) {
-                var props = _ref9.props, payment = _ref9.payment, serviceData = _ref9.serviceData, components = _ref9.components, config = _ref9.config;
+            setupMenu: function(_ref10) {
+                var props = _ref10.props, payment = _ref10.payment, serviceData = _ref10.serviceData, components = _ref10.components, config = _ref10.config;
                 var clientAccessToken = props.clientAccessToken, createOrder = props.createOrder, enableThreeDomainSecure = props.enableThreeDomainSecure, partnerAttributionID = props.partnerAttributionID, sessionID = props.sessionID, clientMetadataID = props.clientMetadataID, userIDToken = props.userIDToken;
                 var fundingSource = payment.fundingSource, paymentMethodID = payment.paymentMethodID, button = payment.button;
                 var content = serviceData.content, facilitatorAccessToken = serviceData.facilitatorAccessToken;
@@ -6075,21 +6072,21 @@ window.spb = function(modules) {
                         });
                     }));
                 };
-                var loadCheckout = function(_ref10) {
+                var loadCheckout = function(_ref11) {
                     return checkout.init({
                         props: props,
                         components: components,
                         serviceData: serviceData,
                         config: config,
-                        payment: _ref10.payment
+                        payment: _ref11.payment
                     }).start();
                 };
                 if ("paypal" === fundingSource) return [ {
                     label: content.payWithDifferentMethod,
                     popup: POPUP_OPTIONS,
-                    onSelect: function(_ref11) {
+                    onSelect: function(_ref12) {
                         var _getLogger$info$track2;
-                        var win = _ref11.win;
+                        var win = _ref12.win;
                         logger_getLogger().info("click_choose_funding").track((_getLogger$info$track2 = {}, 
                         _getLogger$info$track2.transition_name = "process_click_pay_with_different_payment_method", 
                         _getLogger$info$track2.optsel = "pay_with_different_payment_method", _getLogger$info$track2)).flush();
@@ -6121,9 +6118,9 @@ window.spb = function(modules) {
                 }, {
                     label: content.payWithDifferentAccount,
                     popup: POPUP_OPTIONS,
-                    onSelect: function(_ref12) {
+                    onSelect: function(_ref13) {
                         var _getLogger$info$track3;
-                        var win = _ref12.win;
+                        var win = _ref13.win;
                         logger_getLogger().info("click_choose_account").track((_getLogger$info$track3 = {}, 
                         _getLogger$info$track3.transition_name = "process_click_pay_with_different_account", 
                         _getLogger$info$track3.optsel = "pay_with_different_account", _getLogger$info$track3)).flush();
@@ -6169,10 +6166,10 @@ window.spb = function(modules) {
                 } ];
                 throw new Error("Can not render menu for " + fundingSource);
             },
-            updateFlowClientConfig: function(_ref13) {
+            updateFlowClientConfig: function(_ref14) {
                 return updateButtonClientConfig({
-                    fundingSource: _ref13.payment.fundingSource,
-                    orderID: _ref13.orderID,
+                    fundingSource: _ref14.payment.fundingSource,
+                    orderID: _ref14.orderID,
                     inline: !0
                 });
             },
