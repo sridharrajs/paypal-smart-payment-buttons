@@ -97,20 +97,17 @@ function handleValidateResponse({ ThreeDomainSecure, status, body, createOrder, 
         }
 
         if (status !== 200) {
-            const DEFAULT_ERROR_MESSAGE = `Validate payment failed with status: ${ status }`;
-            let message = DEFAULT_ERROR_MESSAGE;
 
             const hasDescriptiveErrorCode = Array.isArray(body.details);
             if (hasDescriptiveErrorCode) {
-                const [ { issue, description } = {} ] = body.details;
-                message = [
-                    ...(issue ? [ `Code: ${ issue }` ] : []),
-                    ...(description ? [ `Description: ${ description }` ] : [])
-                ].join(', ');
-                message = message.trim().length === 0 ? DEFAULT_ERROR_MESSAGE : message;
+                const details = body.details && body.details[0];
+                const { issue = '' } = details || {};
+                if (issue.trim().length === 0) {
+                    throw new Error(`Validate payment failed with issue: ${ issue }`);
+                }
             }
 
-            throw new Error(message);
+            throw new Error(`Validate payment failed with status: ${ status }`);
         }
     });
 }
