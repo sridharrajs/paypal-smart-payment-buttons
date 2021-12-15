@@ -1,23 +1,22 @@
-/* @flow */
+"use strict";
 
-import type { ExpressRequest } from '../../types';
+exports.__esModule = true;
+exports.setRootTransaction = setRootTransaction;
 
-import { ROOT_TRANSACTION_NAME } from './constants';
+var _constants = require("./constants");
 
-type SetRootTransactionOptions = {|
-    userIDToken : ?string,
-    clientAccessToken : ?string
-|};
+function setRootTransaction(req, {
+  userIDToken,
+  clientAccessToken
+}) {
+  const model = req.model = req.model || {};
+  const rootTxn = model.rootTxn = model.rootTxn || {};
 
-export function setRootTransaction(req : ExpressRequest, { userIDToken, clientAccessToken } : SetRootTransactionOptions) {
-    const model = req.model = req.model || {};
-    const rootTxn = model.rootTxn = model.rootTxn || {};
-
-    if (userIDToken) {
-        rootTxn.name = ROOT_TRANSACTION_NAME.SMART_BUTTONS_WALLET;
-    } else if (clientAccessToken) {
-        rootTxn.name = ROOT_TRANSACTION_NAME.SMART_BUTTONS_VAULT;
-    } else {
-        rootTxn.name = ROOT_TRANSACTION_NAME.SMART_BUTTONS;
-    }
+  if (userIDToken) {
+    rootTxn.name = _constants.ROOT_TRANSACTION_NAME.SMART_BUTTONS_WALLET;
+  } else if (clientAccessToken) {
+    rootTxn.name = _constants.ROOT_TRANSACTION_NAME.SMART_BUTTONS_VAULT;
+  } else {
+    rootTxn.name = _constants.ROOT_TRANSACTION_NAME.SMART_BUTTONS;
+  }
 }
