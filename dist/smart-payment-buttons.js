@@ -10039,7 +10039,7 @@ window.spb = function(modules) {
                                 if (200 !== status) {
                                     if (Array.isArray(body.details)) {
                                         var _ref6$issue = (body.details && body.details[0] || {}).issue, issue = void 0 === _ref6$issue ? "" : _ref6$issue;
-                                        if (0 === issue.trim().length) throw new Error("Validate payment failed with issue: " + issue);
+                                        if (0 !== issue.trim().length) throw new Error("Validate payment failed with issue: " + issue);
                                     }
                                     throw new Error("Validate payment failed with status: " + status);
                                 }
