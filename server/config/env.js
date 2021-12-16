@@ -1,33 +1,36 @@
-/* @flow */
+"use strict";
 
-import { ENV } from '@paypal/sdk-constants';
+exports.__esModule = true;
+exports.getEnv = getEnv;
+exports.isEnv = isEnv;
 
-export function getEnv() : $Values<typeof ENV> {
-    let ppEnv;
+var _sdkConstants = require("@paypal/sdk-constants");
 
-    try {
-        // $FlowFixMe
-        ppEnv = require('environment-paypal');
-    } catch (err) {
-        // pass
-    }
+function getEnv() {
+  let ppEnv;
 
-    if ((ppEnv && ppEnv.isProd()) || process.env.NODE_ENV === ENV.PRODUCTION) {
-        return ENV.PRODUCTION;
-    } else if ((ppEnv && ppEnv.isSandbox()) || process.env.NODE_ENV === ENV.SANDBOX) {
-        return ENV.SANDBOX;
-    } else if ((ppEnv && ppEnv.isStage()) || process.env.NODE_ENV === ENV.STAGE) {
-        return ENV.STAGE;
-    } else if ((ppEnv && ppEnv.isTest()) || process.env.NODE_ENV === ENV.TEST) {
-        return ENV.TEST;
-    } else if ((ppEnv && ppEnv.isDev()) || process.env.NODE_ENV === ENV.LOCAL) {
-        return ENV.LOCAL;
-    }
+  try {
+    // $FlowFixMe
+    ppEnv = require('environment-paypal');
+  } catch (err) {// pass
+  }
 
-    return ENV.PRODUCTION;
+  if (ppEnv && ppEnv.isProd() || process.env.NODE_ENV === _sdkConstants.ENV.PRODUCTION) {
+    return _sdkConstants.ENV.PRODUCTION;
+  } else if (ppEnv && ppEnv.isSandbox() || process.env.NODE_ENV === _sdkConstants.ENV.SANDBOX) {
+    return _sdkConstants.ENV.SANDBOX;
+  } else if (ppEnv && ppEnv.isStage() || process.env.NODE_ENV === _sdkConstants.ENV.STAGE) {
+    return _sdkConstants.ENV.STAGE;
+  } else if (ppEnv && ppEnv.isTest() || process.env.NODE_ENV === _sdkConstants.ENV.TEST) {
+    return _sdkConstants.ENV.TEST;
+  } else if (ppEnv && ppEnv.isDev() || process.env.NODE_ENV === _sdkConstants.ENV.LOCAL) {
+    return _sdkConstants.ENV.LOCAL;
+  }
+
+  return _sdkConstants.ENV.PRODUCTION;
 }
 
-export function isEnv(...envs : $ReadOnlyArray<string>) : boolean {
-    const currentEnv = getEnv();
-    return Boolean(envs.find(env => (env === currentEnv)));
+function isEnv(...envs) {
+  const currentEnv = getEnv();
+  return Boolean(envs.find(env => env === currentEnv));
 }

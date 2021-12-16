@@ -2727,13 +2727,11 @@ window.smartCard = function(modules) {
             return PopupOpenError;
         }(util_ExtendableError);
         function popup(url, options) {
-            var _options$closeOnUnloa = (options = options || {}).closeOnUnload, closeOnUnload = void 0 === _options$closeOnUnloa ? 1 : _options$closeOnUnloa, _options$name = options.name, name = void 0 === _options$name ? "" : _options$name, width = options.width, height = options.height;
+            var width = (options = options || {}).width, height = options.height;
             var top = 0;
             var left = 0;
             width && (window.outerWidth ? left = Math.round((window.outerWidth - width) / 2) + window.screenX : window.screen.width && (left = Math.round((window.screen.width - width) / 2)));
             height && (window.outerHeight ? top = Math.round((window.outerHeight - height) / 2) + window.screenY : window.screen.height && (top = Math.round((window.screen.height - height) / 2)));
-            delete options.closeOnUnload;
-            delete options.name;
             width && height && (options = _extends({
                 top: top,
                 left: left,
@@ -2745,6 +2743,8 @@ window.smartCard = function(modules) {
                 resizable: 1,
                 scrollbars: 1
             }, options));
+            var name = options.name || "";
+            delete options.name;
             var params = Object.keys(options).map((function(key) {
                 if (null != options[key]) return key + "=" + stringify(options[key]);
             })).filter(Boolean).join(",");
@@ -2758,7 +2758,7 @@ window.smartCard = function(modules) {
                 var err;
                 throw new dom_PopupOpenError("Can not open popup window - blocked");
             }
-            closeOnUnload && window.addEventListener("unload", (function() {
+            window.addEventListener("unload", (function() {
                 return win.close();
             }));
             return win;
@@ -3999,11 +3999,11 @@ window.smartCard = function(modules) {
     }([ function(E, N, S) {
         "use strict";
         S.r(N), S.d(N, "DEFAULT_COUNTRY", (function() {
-            return a;
+            return C;
         })), S.d(N, "DEFAULT_CURRENCY", (function() {
             return u;
         })), S.d(N, "DEFAULT_INTENT", (function() {
-            return C;
+            return a;
         })), S.d(N, "DEFAULT_COMMIT", (function() {
             return L;
         })), S.d(N, "DEFAULT_SALE_COMMIT", (function() {
@@ -4011,21 +4011,21 @@ window.smartCard = function(modules) {
         })), S.d(N, "DEFAULT_NONSALE_COMMIT", (function() {
             return P;
         })), S.d(N, "DEFAULT_VAULT", (function() {
-            return U;
-        })), S.d(N, "DEFAULT_COMPONENTS", (function() {
             return c;
+        })), S.d(N, "DEFAULT_COMPONENTS", (function() {
+            return U;
         })), S.d(N, "DEFAULT_DEBUG", (function() {
             return G;
         })), S.d(N, "ENV", (function() {
-            return s;
-        })), S.d(N, "MOBILE_ENV", (function() {
             return B;
+        })), S.d(N, "MOBILE_ENV", (function() {
+            return s;
         })), S.d(N, "ERROR_CODE", (function() {
             return K;
         })), S.d(N, "FPTI_KEY", (function() {
-            return p;
-        })), S.d(N, "FPTI_USER_ACTION", (function() {
             return f;
+        })), S.d(N, "FPTI_USER_ACTION", (function() {
+            return p;
         })), S.d(N, "FPTI_DATA_SOURCE", (function() {
             return l;
         })), S.d(N, "FPTI_FEED", (function() {
@@ -4055,27 +4055,27 @@ window.smartCard = function(modules) {
         })), S.d(N, "VAULT", (function() {
             return A;
         })), S.d(N, "CURRENCY", (function() {
-            return r;
-        })), S.d(N, "SDK_PATH", (function() {
             return F;
+        })), S.d(N, "SDK_PATH", (function() {
+            return r;
         })), S.d(N, "SDK_SETTINGS", (function() {
-            return D;
-        })), S.d(N, "SDK_QUERY_KEYS", (function() {
-            return _;
-        })), S.d(N, "COMPONENTS", (function() {
             return H;
+        })), S.d(N, "SDK_QUERY_KEYS", (function() {
+            return D;
+        })), S.d(N, "COMPONENTS", (function() {
+            return _;
         })), S.d(N, "DEBUG", (function() {
             return I;
         })), S.d(N, "QUERY_BOOL", (function() {
             return o;
         })), S.d(N, "UNKNOWN", (function() {
-            return O;
-        })), S.d(N, "PROTOCOL", (function() {
-            return i;
-        })), S.d(N, "PAGE_TYPES", (function() {
-            return M;
-        })), S.d(N, "MERCHANT_ID_MAX", (function() {
             return Z;
+        })), S.d(N, "PROTOCOL", (function() {
+            return O;
+        })), S.d(N, "PAGE_TYPES", (function() {
+            return i;
+        })), S.d(N, "MERCHANT_ID_MAX", (function() {
+            return M;
         })), S.d(N, "PLATFORM", (function() {
             return h;
         })), S.d(N, "TYPES", (function() {
@@ -4367,7 +4367,7 @@ window.smartCard = function(modules) {
             CR: [ t.ES, t.EN, t.FR, t.ZH ],
             CV: [ t.EN, t.FR, t.ES, t.ZH ],
             CY: [ t.EN ],
-            CZ: [ t.CS, t.EN ],
+            CZ: [ t.CS, t.EN, t.FR, t.ES, t.ZH ],
             DE: [ t.DE, t.EN ],
             DJ: [ t.FR, t.EN, t.ES, t.ZH ],
             DK: [ t.DA, t.EN ],
@@ -4375,12 +4375,12 @@ window.smartCard = function(modules) {
             DO: [ t.ES, t.EN, t.FR, t.ZH ],
             DZ: [ t.AR, t.EN, t.FR, t.ES, t.ZH ],
             EC: [ t.ES, t.EN, t.FR, t.ZH ],
-            EE: [ t.ET, t.EN, t.RU ],
+            EE: [ t.ET, t.EN, t.RU, t.FR, t.ES, t.ZH ],
             EG: [ t.AR, t.EN, t.FR, t.ES, t.ZH ],
             ER: [ t.EN, t.FR, t.ES, t.ZH ],
             ES: [ t.ES, t.EN ],
             ET: [ t.EN, t.FR, t.ES, t.ZH ],
-            FI: [ t.FI, t.EN ],
+            FI: [ t.FI, t.EN, t.FR, t.ES, t.ZH ],
             FJ: [ t.EN, t.FR, t.ES, t.ZH ],
             FK: [ t.EN, t.FR, t.ES, t.ZH ],
             FM: [ t.EN ],
@@ -4396,14 +4396,14 @@ window.smartCard = function(modules) {
             GM: [ t.EN, t.FR, t.ES, t.ZH ],
             GN: [ t.FR, t.EN, t.ES, t.ZH ],
             GP: [ t.EN, t.FR, t.ES, t.ZH ],
-            GR: [ t.EL, t.EN ],
+            GR: [ t.EL, t.EN, t.FR, t.ES, t.ZH ],
             GT: [ t.ES, t.EN, t.FR, t.ZH ],
             GW: [ t.EN, t.FR, t.ES, t.ZH ],
             GY: [ t.EN, t.FR, t.ES, t.ZH ],
             HK: [ t.EN, t.ZH_HANT, t.ZH ],
             HN: [ t.ES, t.EN, t.FR, t.ZH ],
             HR: [ t.EN ],
-            HU: [ t.HU, t.EN ],
+            HU: [ t.HU, t.EN, t.FR, t.ES, t.ZH ],
             ID: [ t.ID, t.EN ],
             IE: [ t.EN, t.FR, t.ES, t.ZH ],
             IL: [ t.HE, t.EN ],
@@ -4428,9 +4428,9 @@ window.smartCard = function(modules) {
             LI: [ t.EN, t.FR, t.ES, t.ZH ],
             LK: [ t.SI, t.EN ],
             LS: [ t.EN, t.FR, t.ES, t.ZH ],
-            LT: [ t.LT, t.EN, t.RU, t.ZH ],
+            LT: [ t.LT, t.EN, t.RU, t.FR, t.ES, t.ZH ],
             LU: [ t.EN, t.DE, t.FR, t.ES, t.ZH ],
-            LV: [ t.LV, t.EN, t.RU ],
+            LV: [ t.LV, t.EN, t.RU, t.FR, t.ES, t.ZH ],
             MA: [ t.AR, t.EN, t.FR, t.ES, t.ZH ],
             MC: [ t.FR, t.EN ],
             MD: [ t.EN ],
@@ -4476,7 +4476,7 @@ window.smartCard = function(modules) {
             PY: [ t.ES, t.EN ],
             QA: [ t.EN, t.FR, t.ES, t.ZH, t.AR ],
             RE: [ t.EN, t.FR, t.ES, t.ZH ],
-            RO: [ t.RO, t.EN ],
+            RO: [ t.RO, t.EN, t.FR, t.ES, t.ZH ],
             RS: [ t.EN, t.FR, t.ES, t.ZH ],
             RU: [ t.RU, t.EN ],
             RW: [ t.FR, t.EN, t.ES, t.ZH ],
@@ -4486,9 +4486,9 @@ window.smartCard = function(modules) {
             SE: [ t.SV, t.EN ],
             SG: [ t.EN ],
             SH: [ t.EN, t.FR, t.ES, t.ZH ],
-            SI: [ t.SL, t.EN ],
+            SI: [ t.SL, t.EN, t.FR, t.ES, t.ZH ],
             SJ: [ t.EN, t.FR, t.ES, t.ZH ],
-            SK: [ t.SK, t.EN ],
+            SK: [ t.SK, t.EN, t.FR, t.ES, t.ZH ],
             SL: [ t.EN, t.FR, t.ES, t.ZH ],
             SM: [ t.EN, t.FR, t.ES, t.ZH ],
             SN: [ t.FR, t.EN, t.ES, t.ZH ],
@@ -4539,7 +4539,7 @@ window.smartCard = function(modules) {
         }, A = {
             TRUE: !0,
             FALSE: !1
-        }, r = {
+        }, F = {
             AED: "AED",
             ALL: "ALL",
             ANG: "ANG",
@@ -4642,7 +4642,7 @@ window.smartCard = function(modules) {
             XAF: "XAF",
             XCD: "XCD",
             YER: "YER"
-        }, F = "/sdk/js", D = {
+        }, r = "/sdk/js", H = {
             NAMESPACE: "data-namespace",
             CLIENT_TOKEN: "data-client-token",
             MERCHANT_ID: "data-merchant-id",
@@ -4656,9 +4656,8 @@ window.smartCard = function(modules) {
             AMOUNT: "data-amount",
             CLIENT_METADATA_ID: "data-client-metadata-id",
             PAGE_TYPE: "data-page-type",
-            USER_EXPERIENCE_FLOW: "data-user-experience-flow",
-            DATA_POPUPS_DISABLED: "data-popups-disabled"
-        }, _ = {
+            USER_EXPERIENCE_FLOW: "data-user-experience-flow"
+        }, D = {
             COMPONENTS: "components",
             ENV: "env",
             DEBUG: "debug",
@@ -4679,7 +4678,7 @@ window.smartCard = function(modules) {
             STAGE_ALIAS: "stage-alias",
             CDN_REGISTRY: "cdn-registry",
             VERSION: "version"
-        }, H = {
+        }, _ = {
             BUTTONS: "buttons",
             HOSTED_FIELDS: "hosted-fields"
         }, I = {
@@ -4688,10 +4687,10 @@ window.smartCard = function(modules) {
         }, o = {
             TRUE: "true",
             FALSE: "false"
-        }, O = "unknown", i = {
+        }, Z = "unknown", O = {
             HTTP: "http",
             HTTPS: "https"
-        }, M = {
+        }, i = {
             HOME: "home",
             PRODUCT: "product",
             CART: "cart",
@@ -4700,18 +4699,18 @@ window.smartCard = function(modules) {
             SEARCH_RESULTS: "search-results",
             PRODUCT_DETAILS: "product-details",
             MINI_CART: "mini-cart"
-        }, Z = 10, a = R.US, u = r.USD, C = e.CAPTURE, L = n.TRUE, d = n.TRUE, P = n.TRUE, U = A.FALSE, c = H.BUTTONS, G = I.FALSE, s = {
+        }, M = 10, C = R.US, u = F.USD, a = e.CAPTURE, L = n.TRUE, d = n.TRUE, P = n.TRUE, c = A.FALSE, U = _.BUTTONS, G = I.FALSE, B = {
             LOCAL: "local",
             STAGE: "stage",
             SANDBOX: "sandbox",
             PRODUCTION: "production",
             TEST: "test"
-        }, B = {
+        }, s = {
             ANDROID: "android",
             IOS: "iOS"
         }, K = {
             VALIDATION_ERROR: "validation_error"
-        }, p = {
+        }, f = {
             FEED: "feed_name",
             STATE: "state_name",
             TRANSITION: "transition_name",
@@ -4770,7 +4769,7 @@ window.smartCard = function(modules) {
             TIMESTAMP: "t",
             OPTION_SELECTED: "optsel",
             USER_IDENTITY_METHOD: "user_identity_method"
-        }, f = {
+        }, p = {
             COMMIT: "commit",
             CONTINUE: "continue"
         }, l = {
@@ -4823,7 +4822,6 @@ window.smartCard = function(modules) {
             BANK: "bank",
             CREDIT: "credit"
         }, J = {
-            PAY_IN_3: "payIn3",
             PAY_IN_4: "payIn4",
             PAYLATER: "paylater",
             CREDIT: "credit"
@@ -4874,7 +4872,7 @@ window.smartCard = function(modules) {
             return target;
         }).apply(this, arguments);
     }
-    var n, l, preact_module_u, preact_module_t, preact_module_r, preact_module_o, preact_module_e = {}, c = [], s = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i;
+    var n, l, preact_module_u, preact_module_t, preact_module_o, preact_module_r, preact_module_e = {}, c = [], s = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i;
     function preact_module_a(n, l) {
         for (var u in l) n[u] = l[u];
         return n;
@@ -4884,18 +4882,18 @@ window.smartCard = function(modules) {
         l && l.removeChild(n);
     }
     function v(l, u, i) {
-        var t, r, o, f = {};
-        for (o in u) "key" == o ? t = u[o] : "ref" == o ? r = u[o] : f[o] = u[o];
+        var t, o, r, f = {};
+        for (r in u) "key" == r ? t = u[r] : "ref" == r ? o = u[r] : f[r] = u[r];
         if (arguments.length > 2 && (f.children = arguments.length > 3 ? n.call(arguments, 2) : i), 
-        "function" == typeof l && null != l.defaultProps) for (o in l.defaultProps) void 0 === f[o] && (f[o] = l.defaultProps[o]);
-        return y(l, f, t, r, null);
+        "function" == typeof l && null != l.defaultProps) for (r in l.defaultProps) void 0 === f[r] && (f[r] = l.defaultProps[r]);
+        return y(l, f, t, o, null);
     }
-    function y(n, i, t, r, o) {
+    function y(n, i, t, o, r) {
         var f = {
             type: n,
             props: i,
             key: t,
-            ref: r,
+            ref: o,
             __k: null,
             __: null,
             __b: 0,
@@ -4904,9 +4902,9 @@ window.smartCard = function(modules) {
             __c: null,
             __h: null,
             constructor: void 0,
-            __v: null == o ? ++preact_module_u : o
+            __v: null == r ? ++preact_module_u : r
         };
-        return null == o && null != l.vnode && l.vnode(f), f;
+        return null != l.vnode && l.vnode(f), f;
     }
     function preact_module_d(n) {
         return n.children;
@@ -4930,19 +4928,19 @@ window.smartCard = function(modules) {
         }
     }
     function m(n) {
-        (!n.__d && (n.__d = !0) && preact_module_t.push(n) && !g.__r++ || preact_module_o !== l.debounceRendering) && ((preact_module_o = l.debounceRendering) || preact_module_r)(g);
+        (!n.__d && (n.__d = !0) && preact_module_t.push(n) && !g.__r++ || preact_module_r !== l.debounceRendering) && ((preact_module_r = l.debounceRendering) || preact_module_o)(g);
     }
     function g() {
         for (var n; g.__r = preact_module_t.length; ) n = preact_module_t.sort((function(n, l) {
             return n.__v.__b - l.__v.__b;
         })), preact_module_t = [], n.some((function(n) {
-            var l, u, i, t, r, o;
-            n.__d && (r = (t = (l = n).__v).__e, (o = l.__P) && (u = [], (i = preact_module_a({}, t)).__v = t.__v + 1, 
-            j(o, t, i, l.__n, void 0 !== o.ownerSVGElement, null != t.__h ? [ r ] : null, u, null == r ? k(t) : r, t.__h), 
-            z(u, t), t.__e != r && b(t)));
+            var l, u, i, t, o, r;
+            n.__d && (o = (t = (l = n).__v).__e, (r = l.__P) && (u = [], (i = preact_module_a({}, t)).__v = t.__v + 1, 
+            j(r, t, i, l.__n, void 0 !== r.ownerSVGElement, null != t.__h ? [ o ] : null, u, null == o ? k(t) : o, t.__h), 
+            z(u, t), t.__e != o && b(t)));
         }));
     }
-    function w(n, l, u, i, t, r, o, f, s, a) {
+    function w(n, l, u, i, t, o, r, f, s, a) {
         var h, v, p, _, b, m, g, w = i && i.__k || c, A = w.length;
         for (u.__k = [], h = 0; h < l.length; h++) if (null != (_ = u.__k[h] = null == (_ = l[h]) || "boolean" == typeof _ ? null : "string" == typeof _ || "number" == typeof _ || "bigint" == typeof _ ? y(null, _, null, null, _) : Array.isArray(_) ? y(preact_module_d, {
             children: _
@@ -4954,39 +4952,40 @@ window.smartCard = function(modules) {
                 }
                 p = null;
             }
-            j(n, _, p = p || preact_module_e, t, r, o, f, s, a), b = _.__e, (v = _.ref) && p.ref != v && (g || (g = []), 
+            j(n, _, p = p || preact_module_e, t, o, r, f, s, a), b = _.__e, (v = _.ref) && p.ref != v && (g || (g = []), 
             p.ref && g.push(p.ref, null, _), g.push(v, _.__c || b, _)), null != b ? (null == m && (m = b), 
-            "function" == typeof _.type && _.__k === p.__k ? _.__d = s = x(_, s, n) : s = P(n, _, p, w, b, s), 
-            "function" == typeof u.type && (u.__d = s)) : s && p.__e == s && s.parentNode != n && (s = k(p));
+            "function" == typeof _.type && null != _.__k && _.__k === p.__k ? _.__d = s = x(_, s, n) : s = P(n, _, p, w, b, s), 
+            a || "option" !== u.type ? "function" == typeof u.type && (u.__d = s) : n.value = "") : s && p.__e == s && s.parentNode != n && (s = k(p));
         }
         for (u.__e = m, h = A; h--; ) null != w[h] && ("function" == typeof u.type && null != w[h].__e && w[h].__e == u.__d && (u.__d = k(i, h + 1)), 
         N(w[h], w[h]));
         if (g) for (h = 0; h < g.length; h++) M(g[h], g[++h], g[++h]);
     }
     function x(n, l, u) {
-        for (var i, t = n.__k, r = 0; t && r < t.length; r++) (i = t[r]) && (i.__ = n, l = "function" == typeof i.type ? x(i, l, u) : P(u, i, i, t, i.__e, l));
+        var i, t;
+        for (i = 0; i < n.__k.length; i++) (t = n.__k[i]) && (t.__ = n, l = "function" == typeof t.type ? x(t, l, u) : P(u, t, t, n.__k, t.__e, l));
         return l;
     }
-    function P(n, l, u, i, t, r) {
-        var o, f, e;
-        if (void 0 !== l.__d) o = l.__d, l.__d = void 0; else if (null == u || t != r || null == t.parentNode) n: if (null == r || r.parentNode !== n) n.appendChild(t), 
-        o = null; else {
-            for (f = r, e = 0; (f = f.nextSibling) && e < i.length; e += 2) if (f == t) break n;
-            n.insertBefore(t, r), o = r;
+    function P(n, l, u, i, t, o) {
+        var r, f, e;
+        if (void 0 !== l.__d) r = l.__d, l.__d = void 0; else if (null == u || t != o || null == t.parentNode) n: if (null == o || o.parentNode !== n) n.appendChild(t), 
+        r = null; else {
+            for (f = o, e = 0; (f = f.nextSibling) && e < i.length; e += 2) if (f == t) break n;
+            n.insertBefore(t, o), r = o;
         }
-        return void 0 !== o ? o : t.nextSibling;
+        return void 0 !== r ? r : t.nextSibling;
     }
     function $(n, l, u) {
         "-" === l[0] ? n.setProperty(l, u) : n[l] = null == u ? "" : "number" != typeof u || s.test(l) ? u : u + "px";
     }
     function H(n, l, u, i, t) {
-        var r;
+        var o;
         n: if ("style" === l) if ("string" == typeof u) n.style.cssText = u; else {
             if ("string" == typeof i && (n.style.cssText = i = ""), i) for (l in i) u && l in u || $(n.style, l, "");
             if (u) for (l in u) i && u[l] === i[l] || $(n.style, l, u[l]);
-        } else if ("o" === l[0] && "n" === l[1]) r = l !== (l = l.replace(/Capture$/, "")), 
+        } else if ("o" === l[0] && "n" === l[1]) o = l !== (l = l.replace(/Capture$/, "")), 
         l = l.toLowerCase() in n ? l.toLowerCase().slice(2) : l.slice(2), n.l || (n.l = {}), 
-        n.l[l + r] = u, u ? i || n.addEventListener(l, r ? T : I, r) : n.removeEventListener(l, r ? T : I, r); else if ("dangerouslySetInnerHTML" !== l) {
+        n.l[l + o] = u, u ? i || n.addEventListener(l, o ? T : I, o) : n.removeEventListener(l, o ? T : I, o); else if ("dangerouslySetInnerHTML" !== l) {
             if (t) l = l.replace(/xlink[H:h]/, "h").replace(/sName$/, "s"); else if ("href" !== l && "list" !== l && "form" !== l && "tabIndex" !== l && "download" !== l && l in n) try {
                 n[l] = null == u ? "" : u;
                 break n;
@@ -5000,10 +4999,10 @@ window.smartCard = function(modules) {
     function T(n) {
         this.l[n.type + !0](l.event ? l.event(n) : n);
     }
-    function j(n, u, i, t, r, o, f, e, c) {
+    function j(n, u, i, t, o, r, f, e, c) {
         var s, h, v, y, p, k, b, m, g, x, A, P = u.type;
         if (void 0 !== u.constructor) return null;
-        null != i.__h && (c = i.__h, e = u.__e = i.__e, u.__h = null, o = [ e ]), (s = l.__b) && s(u);
+        null != i.__h && (c = i.__h, e = u.__e = i.__e, u.__h = null, r = [ e ]), (s = l.__b) && s(u);
         try {
             n: if ("function" == typeof P) {
                 if (m = u.props, g = (s = P.contextType) && t[s.__c], x = s ? g ? g.props.value : s.__ : t, 
@@ -5030,12 +5029,12 @@ window.smartCard = function(modules) {
                 h.__P = n, s = h.render(h.props, h.state, h.context), h.state = h.__s, null != h.getChildContext && (t = preact_module_a(preact_module_a({}, t), h.getChildContext())), 
                 v || null == h.getSnapshotBeforeUpdate || (k = h.getSnapshotBeforeUpdate(y, p)), 
                 A = null != s && s.type === preact_module_d && null == s.key ? s.props.children : s, 
-                w(n, Array.isArray(A) ? A : [ A ], u, i, t, r, o, f, e, c), h.base = u.__e, u.__h = null, 
+                w(n, Array.isArray(A) ? A : [ A ], u, i, t, o, r, f, e, c), h.base = u.__e, u.__h = null, 
                 h.__h.length && f.push(h), b && (h.__E = h.__ = null), h.__e = !1;
-            } else null == o && u.__v === i.__v ? (u.__k = i.__k, u.__e = i.__e) : u.__e = L(i.__e, u, i, t, r, o, f, c);
+            } else null == r && u.__v === i.__v ? (u.__k = i.__k, u.__e = i.__e) : u.__e = L(i.__e, u, i, t, o, r, f, c);
             (s = l.diffed) && s(u);
         } catch (n) {
-            u.__v = null, (c || null != o) && (u.__e = e, u.__h = !!c, o[o.indexOf(e)] = null), 
+            u.__v = null, (c || null != r) && (u.__e = e, u.__h = !!c, r[r.indexOf(e)] = null), 
             l.__e(n, u, i);
         }
     }
@@ -5050,30 +5049,30 @@ window.smartCard = function(modules) {
             }
         }));
     }
-    function L(l, u, i, t, r, o, f, c) {
+    function L(l, u, i, t, o, r, f, c) {
         var s, a, v, y = i.props, p = u.props, d = u.type, _ = 0;
-        if ("svg" === d && (r = !0), null != o) for (;_ < o.length; _++) if ((s = o[_]) && "setAttribute" in s == !!d && (d ? s.localName === d : 3 === s.nodeType)) {
-            l = s, o[_] = null;
+        if ("svg" === d && (o = !0), null != r) for (;_ < r.length; _++) if ((s = r[_]) && (s === l || (d ? s.localName == d : 3 == s.nodeType))) {
+            l = s, r[_] = null;
             break;
         }
         if (null == l) {
             if (null === d) return document.createTextNode(p);
-            l = r ? document.createElementNS("http://www.w3.org/2000/svg", d) : document.createElement(d, p.is && p), 
-            o = null, c = !1;
+            l = o ? document.createElementNS("http://www.w3.org/2000/svg", d) : document.createElement(d, p.is && p), 
+            r = null, c = !1;
         }
         if (null === d) y === p || c && l.data === p || (l.data = p); else {
-            if (o = o && n.call(l.childNodes), a = (y = i.props || preact_module_e).dangerouslySetInnerHTML, 
+            if (r = r && n.call(l.childNodes), a = (y = i.props || preact_module_e).dangerouslySetInnerHTML, 
             v = p.dangerouslySetInnerHTML, !c) {
-                if (null != o) for (y = {}, _ = 0; _ < l.attributes.length; _++) y[l.attributes[_].name] = l.attributes[_].value;
+                if (null != r) for (y = {}, _ = 0; _ < l.attributes.length; _++) y[l.attributes[_].name] = l.attributes[_].value;
                 (v || a) && (v && (a && v.__html == a.__html || v.__html === l.innerHTML) || (l.innerHTML = v && v.__html || ""));
             }
             if (function(n, l, u, i, t) {
-                var r;
-                for (r in u) "children" === r || "key" === r || r in l || H(n, r, null, u[r], i);
-                for (r in l) t && "function" != typeof l[r] || "children" === r || "key" === r || "value" === r || "checked" === r || u[r] === l[r] || H(n, r, l[r], u[r], i);
-            }(l, p, y, r, c), v) u.__k = []; else if (_ = u.props.children, w(l, Array.isArray(_) ? _ : [ _ ], u, i, t, r && "foreignObject" !== d, o, f, o ? o[0] : i.__k && k(i, 0), c), 
-            null != o) for (_ = o.length; _--; ) null != o[_] && h(o[_]);
-            c || ("value" in p && void 0 !== (_ = p.value) && (_ !== y.value || _ !== l.value || "progress" === d && !_) && H(l, "value", _, y.value, !1), 
+                var o;
+                for (o in u) "children" === o || "key" === o || o in l || H(n, o, null, u[o], i);
+                for (o in l) t && "function" != typeof l[o] || "children" === o || "key" === o || "value" === o || "checked" === o || u[o] === l[o] || H(n, o, l[o], u[o], i);
+            }(l, p, y, o, c), v) u.__k = []; else if (_ = u.props.children, w(l, Array.isArray(_) ? _ : [ _ ], u, i, t, o && "foreignObject" !== d, r, f, r ? r[0] : i.__k && k(i, 0), c), 
+            null != r) for (_ = r.length; _--; ) null != r[_] && h(r[_]);
+            c || ("value" in p && void 0 !== (_ = p.value) && (_ !== l.value || "progress" === d && !_) && H(l, "value", _, y.value, !1), 
             "checked" in p && void 0 !== (_ = p.checked) && _ !== l.checked && H(l, "checked", _, y.checked, !1));
         }
         return l;
@@ -5086,7 +5085,7 @@ window.smartCard = function(modules) {
         }
     }
     function N(n, u, i) {
-        var t, r;
+        var t, o;
         if (l.unmount && l.unmount(n), (t = n.ref) && (t.current && t.current !== n.__e || M(t, null, u)), 
         null != (t = n.__c)) {
             if (t.componentWillUnmount) try {
@@ -5096,7 +5095,7 @@ window.smartCard = function(modules) {
             }
             t.base = t.__P = null;
         }
-        if (t = n.__k) for (r = 0; r < t.length; r++) t[r] && N(t[r], u, "function" != typeof n.type);
+        if (t = n.__k) for (o = 0; o < t.length; o++) t[o] && N(t[o], u, "function" != typeof n.type);
         i || null == n.__e || h(n.__e), n.__e = n.__d = void 0;
     }
     function O(n, l, u) {
@@ -5120,7 +5119,7 @@ window.smartCard = function(modules) {
         null != n && this.__v && (l && this.__h.push(l), m(this));
     }, _.prototype.forceUpdate = function(n) {
         this.__v && (this.__e = !0, n && this.__h.push(n), m(this));
-    }, _.prototype.render = preact_module_d, preact_module_t = [], preact_module_r = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, 
+    }, _.prototype.render = preact_module_d, preact_module_t = [], preact_module_o = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, 
     g.__r = 0;
     var hooks_module_t, hooks_module_u, hooks_module_r, hooks_module_o = 0, hooks_module_i = [], hooks_module_c = l.__b, hooks_module_f = l.__r, hooks_module_e = l.diffed, hooks_module_a = l.__c, hooks_module_v = l.unmount;
     function hooks_module_m(t, r) {
@@ -5155,14 +5154,13 @@ window.smartCard = function(modules) {
         }), []);
     }
     function hooks_module_x() {
-        var t;
-        for (hooks_module_i.sort((function(n, t) {
-            return n.__v.__b - t.__v.__b;
-        })); t = hooks_module_i.pop(); ) if (t.__P) try {
-            t.__H.__h.forEach(hooks_module_g), t.__H.__h.forEach(hooks_module_j), t.__H.__h = [];
-        } catch (u) {
-            t.__H.__h = [], l.__e(u, t.__v);
-        }
+        hooks_module_i.forEach((function(t) {
+            if (t.__P) try {
+                t.__H.__h.forEach(hooks_module_g), t.__H.__h.forEach(hooks_module_j), t.__H.__h = [];
+            } catch (u) {
+                t.__H.__h = [], l.__e(u, t.__v);
+            }
+        })), hooks_module_i = [];
     }
     l.__b = function(n) {
         hooks_module_u = null, hooks_module_c && hooks_module_c(n);
@@ -5178,7 +5176,7 @@ window.smartCard = function(modules) {
                 clearTimeout(r), hooks_module_b && cancelAnimationFrame(t), setTimeout(n);
             }, r = setTimeout(u, 100);
             hooks_module_b && (t = requestAnimationFrame(u));
-        })(hooks_module_x)), hooks_module_u = null;
+        })(hooks_module_x)), hooks_module_u = void 0;
     }, l.__c = function(t, u) {
         u.some((function(t) {
             try {
@@ -5193,19 +5191,17 @@ window.smartCard = function(modules) {
         })), hooks_module_a && hooks_module_a(t, u);
     }, l.unmount = function(t) {
         hooks_module_v && hooks_module_v(t);
-        var u, r = t.__c;
-        r && r.__H && (r.__H.__.forEach((function(n) {
-            try {
-                hooks_module_g(n);
-            } catch (n) {
-                u = n;
-            }
-        })), u && l.__e(u, r.__v));
+        var u = t.__c;
+        if (u && u.__H) try {
+            u.__H.__.forEach(hooks_module_g);
+        } catch (t) {
+            l.__e(t, u.__v);
+        }
     };
     var hooks_module_b = "function" == typeof requestAnimationFrame;
     function hooks_module_g(n) {
-        var t = hooks_module_u, r = n.__c;
-        "function" == typeof r && (n.__c = void 0, r()), hooks_module_u = t;
+        var t = hooks_module_u;
+        "function" == typeof n.__c && n.__c(), hooks_module_u = t;
     }
     function hooks_module_j(n) {
         var t = hooks_module_u;
@@ -5422,10 +5418,6 @@ window.smartCard = function(modules) {
             if ("undefined" == typeof Promise) throw new TypeError("Could not find Promise");
             return Promise.resolve(this);
         };
-        _proto.lazy = function() {
-            this.errorHandled = !0;
-            return this;
-        };
         ZalgoPromise.resolve = function(value) {
             return value instanceof ZalgoPromise ? value : utils_isPromise(value) ? new ZalgoPromise((function(resolve, reject) {
                 return value.then(resolve, reject);
@@ -5531,21 +5523,9 @@ window.smartCard = function(modules) {
         return ZalgoPromise;
     }();
     var IE_WIN_ACCESS_ERROR = "Call was rejected by callee.\r\n";
-    function getActualProtocol(win) {
-        void 0 === win && (win = window);
-        return win.location.protocol;
-    }
-    function getProtocol(win) {
-        void 0 === win && (win = window);
-        if (win.mockDomain) {
-            var protocol = win.mockDomain.split("//")[0];
-            if (protocol) return protocol;
-        }
-        return getActualProtocol(win);
-    }
     function isAboutProtocol(win) {
         void 0 === win && (win = window);
-        return "about:" === getProtocol(win);
+        return "about:" === win.location.protocol;
     }
     function utils_getParent(win) {
         void 0 === win && (win = window);
@@ -5563,7 +5543,7 @@ window.smartCard = function(modules) {
         void 0 === win && (win = window);
         var location = win.location;
         if (!location) throw new Error("Can not read window location");
-        var protocol = getActualProtocol(win);
+        var protocol = location.protocol;
         if (!protocol) throw new Error("Can not read window protocol");
         if ("file:" === protocol) return "file://";
         if ("about:" === protocol) {
@@ -5590,12 +5570,6 @@ window.smartCard = function(modules) {
             } catch (err) {}
             try {
                 if (isAboutProtocol(win) && canReadFromWindow()) return !0;
-            } catch (err) {}
-            try {
-                if (function(win) {
-                    void 0 === win && (win = window);
-                    return "mock:" === getProtocol(win);
-                }(win) && canReadFromWindow()) return !0;
             } catch (err) {}
             try {
                 if (getActualDomain(win) === getActualDomain(window)) return !0;
@@ -9184,8 +9158,8 @@ window.smartCard = function(modules) {
             props: getCardProps({
                 facilitatorAccessToken: _ref3.facilitatorAccessToken
             })
-        }), i = util_getBody(), l.__ && l.__(u, i), o = !1 ? null : i.__k, f = [], j(i, u = i.__k = v(preact_module_d, null, [ u ]), o || preact_module_e, preact_module_e, void 0 !== i.ownerSVGElement, o ? null : i.firstChild ? n.call(i.childNodes) : null, f, o ? o.__e : i.firstChild, !1), 
+        }), i = util_getBody(), l.__ && l.__(u, i), r = !1 ? null : i.__k, f = [], j(i, u = i.__k = v(preact_module_d, null, [ u ]), r || preact_module_e, preact_module_e, void 0 !== i.ownerSVGElement, r ? null : i.firstChild ? n.call(i.childNodes) : null, f, r ? r.__e : i.firstChild, !1), 
         z(f, u);
-        var u, i, o, f;
+        var u, i, r, f;
     }
 } ]);

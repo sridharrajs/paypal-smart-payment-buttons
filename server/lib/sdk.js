@@ -1,194 +1,199 @@
-/* @flow */
+"use strict";
 
-import { unpackSDKMeta } from '@paypal/sdk-client';
-import { undotify } from 'belter';
-import { ERROR_CODE } from '@paypal/sdk-constants';
+exports.__esModule = true;
+exports.getSDKMeta = getSDKMeta;
+exports.sdkMiddleware = sdkMiddleware;
 
-import type { ExpressRequest, ExpressResponse, LoggerType, CacheType, InstanceLocationInformation } from '../types';
-import { startWatchers } from '../watchers';
-import { EVENT, BROWSER_CACHE_TIME, HTTP_HEADER } from '../config';
+var _sdkClient = require("@paypal/sdk-client");
 
-import { clientErrorResponse, serverErrorResponse, defaultLogger, type LoggerBufferType,
-    getLogBuffer, safeJSON, isError, emptyResponse } from './util';
+var _belter = require("belter");
 
+var _sdkConstants = require("@paypal/sdk-constants");
 
-function getSDKMetaString(req : ExpressRequest) : string {
-    const sdkMeta = req.query.sdkMeta || '';
+var _watchers = require("../watchers");
 
-    if (typeof sdkMeta !== 'string') {
-        throw new TypeError(`Expected sdkMeta to be a string`);
-    }
+var _config = require("../config");
 
-    return sdkMeta;
+var _util = require("./util");
+
+function getSDKMetaString(req) {
+  const sdkMeta = req.query.sdkMeta || '';
+
+  if (typeof sdkMeta !== 'string') {
+    throw new TypeError(`Expected sdkMeta to be a string`);
+  }
+
+  return sdkMeta;
 }
 
-type SDKMeta = {|
-    getSDKLoader : ({| nonce? : ?string |}) => string
-|};
-
-export function getSDKMeta(req : ExpressRequest) : SDKMeta {
-    return unpackSDKMeta(getSDKMetaString(req));
+function getSDKMeta(req) {
+  return (0, _sdkClient.unpackSDKMeta)(getSDKMetaString(req));
 }
-
-export type SDKMiddlewareOptions = {|
-    logger : LoggerType | void,
-    cache : ?CacheType,
-    locationInformation : InstanceLocationInformation
-|};
-
-export type SDKMiddleware = ({|
-    req : ExpressRequest,
-    res : ExpressResponse,
-    params : Object,
-    sdkMeta : string,
-    meta : SDKMeta,
-    logBuffer : LoggerBufferType
-|}) => void | Promise<void>;
-
-export type SDKScriptMiddleware = ({|
-    req : ExpressRequest,
-    res : ExpressResponse,
-    logBuffer : LoggerBufferType,
-    params : Object
-|}) => void | Promise<void>;
-
-export type SDKPreflightMiddleware = ({|
-    req : ExpressRequest,
-    res : ExpressResponse,
-    logBuffer : LoggerBufferType,
-    params : Object
-|}) => void | Promise<void>;
-
-
-export type ExpressMiddleware = (
-    req : ExpressRequest,
-    res : ExpressResponse
-) => void | Promise<void>;
 
 let logBuffer;
 
-export function sdkMiddleware({ logger = defaultLogger, cache, locationInformation } : SDKMiddlewareOptions, { app, script, preflight } : {| app : SDKMiddleware, script? : SDKScriptMiddleware, preflight? : SDKPreflightMiddleware |}) : ExpressMiddleware {
-    logBuffer = logBuffer || getLogBuffer(logger);
-    startWatchers({ logBuffer, cache, locationInformation });
+function sdkMiddleware({
+  logger = _util.defaultLogger,
+  cache,
+  locationInformation
+}, {
+  app,
+  script,
+  preflight
+}) {
+  logBuffer = logBuffer || (0, _util.getLogBuffer)(logger);
+  (0, _watchers.startWatchers)({
+    logBuffer,
+    cache,
+    locationInformation
+  });
 
-    const appMiddleware = async (req : ExpressRequest, res : ExpressResponse) : Promise<void> => {
-        logBuffer.flush(req);
+  const appMiddleware = async (req, res) => {
+    logBuffer.flush(req);
 
-        try {
-            let params;
+    try {
+      let params;
 
-            try {
-                params = { ...undotify(req.query), ...undotify(req.body) };
-            } catch (err) {
-                return clientErrorResponse(res, `Invalid params: ${ safeJSON(req.query) }`);
-            }
+      try {
+        params = { ...(0, _belter.undotify)(req.query),
+          ...(0, _belter.undotify)(req.body)
+        };
+      } catch (err) {
+        return (0, _util.clientErrorResponse)(res, `Invalid params: ${(0, _util.safeJSON)(req.query)}`);
+      }
 
-            const sdkMeta = getSDKMetaString(req);
+      const sdkMeta = getSDKMetaString(req);
+      let meta;
 
-            let meta;
+      try {
+        meta = getSDKMeta(req);
+      } catch (err) {
+        logger.warn(req, 'bad_sdk_meta', {
+          sdkMeta: (req.query.sdkMeta || '').toString(),
+          err: err.stack ? err.stack : err.toString()
+        });
+        return (0, _util.clientErrorResponse)(res, `Invalid sdk meta: ${(req.query.sdkMeta || '').toString()}`);
+      }
 
-            try {
-                meta = getSDKMeta(req);
-            } catch (err) {
-                logger.warn(req, 'bad_sdk_meta', { sdkMeta: (req.query.sdkMeta || '').toString(), err: err.stack ? err.stack : err.toString() });
-                return clientErrorResponse(res, `Invalid sdk meta: ${ (req.query.sdkMeta || '').toString() }`);
-            }
+      await app({
+        req,
+        res,
+        params,
+        meta,
+        logBuffer,
+        sdkMeta
+      });
+      logBuffer.flush(req);
+    } catch (err) {
+      if ((0, _util.isError)(err, _sdkConstants.ERROR_CODE.VALIDATION_ERROR)) {
+        logger.warn(req, _config.EVENT.VALIDATION, {
+          err: err.stack ? err.stack : err.toString()
+        });
+        return (0, _util.clientErrorResponse)(res, err.message);
+      }
 
-            await app({ req, res, params, meta, logBuffer, sdkMeta });
-            logBuffer.flush(req);
+      console.error(err.stack ? err.stack : err); // eslint-disable-line no-console
 
-        } catch (err) {
-            if (isError(err, ERROR_CODE.VALIDATION_ERROR)) {
-                logger.warn(req, EVENT.VALIDATION, { err: err.stack ? err.stack : err.toString() });
-                return clientErrorResponse(res, err.message);
-            }
+      logger.error(req, _config.EVENT.ERROR, {
+        err: err.stack ? err.stack : err.toString()
+      });
+      return (0, _util.serverErrorResponse)(res, err.stack ? err.stack : err.toString());
+    }
+  };
 
-            console.error(err.stack ? err.stack : err); // eslint-disable-line no-console
-            logger.error(req, EVENT.ERROR, { err: err.stack ? err.stack : err.toString() });
-            return serverErrorResponse(res, err.stack ? err.stack : err.toString());
-        }
-    };
+  const scriptMiddleware = async (req, res) => {
+    logBuffer.flush(req);
 
-    const scriptMiddleware = async (req : ExpressRequest, res : ExpressResponse) : Promise<void> => {
-        logBuffer.flush(req);
+    try {
+      if (!script) {
+        throw new Error(`No script available`);
+      }
 
-        try {
-            if (!script) {
-                throw new Error(`No script available`);
-            }
+      let params;
 
-            let params;
+      try {
+        params = (0, _belter.undotify)(req.query);
+      } catch (err) {
+        return (0, _util.clientErrorResponse)(res, `Invalid params: ${(0, _util.safeJSON)(req.query)}`);
+      }
 
-            try {
-                params = undotify(req.query);
-            } catch (err) {
-                return clientErrorResponse(res, `Invalid params: ${ safeJSON(req.query) }`);
-            }
+      await script({
+        req,
+        res,
+        params,
+        logBuffer
+      });
+      logBuffer.flush(req);
+    } catch (err) {
+      console.error(err.stack ? err.stack : err); // eslint-disable-line no-console
 
-            await script({ req, res, params, logBuffer });
-            logBuffer.flush(req);
+      logger.error(req, _config.EVENT.ERROR, {
+        err: err.stack ? err.stack : err.toString()
+      });
+      return (0, _util.serverErrorResponse)(res, err.stack ? err.stack : err.toString());
+    }
+  };
 
-        } catch (err) {
-            console.error(err.stack ? err.stack : err); // eslint-disable-line no-console
-            logger.error(req, EVENT.ERROR, { err: err.stack ? err.stack : err.toString() });
-            return serverErrorResponse(res, err.stack ? err.stack : err.toString());
-        }
-    };
+  const preflightMiddleware = async (req, res) => {
+    logBuffer.flush(req);
+    res.header('Access-Control-Allow-Origin', '*');
+    let params;
 
-    const preflightMiddleware = async (req : ExpressRequest, res : ExpressResponse) : Promise<void> => {
-        logBuffer.flush(req);
+    try {
+      params = (0, _belter.undotify)(req.query);
+    } catch (err) {
+      return (0, _util.clientErrorResponse)(res, `Invalid params: ${(0, _util.safeJSON)(req.query)}`);
+    }
 
-        res.header('Access-Control-Allow-Origin', '*');
+    if (!preflight) {
+      return (0, _util.emptyResponse)(res);
+    }
 
-        let params;
+    try {
+      return await preflight({
+        req,
+        res,
+        params,
+        logBuffer
+      });
+    } catch (err) {
+      if ((0, _util.isError)(err, _sdkConstants.ERROR_CODE.VALIDATION_ERROR)) {
+        logger.warn(req, _config.EVENT.VALIDATION, {
+          err: err.stack ? err.stack : err.toString()
+        });
+        return (0, _util.clientErrorResponse)(res, err.message);
+      }
 
-        try {
-            params = undotify(req.query);
-        } catch (err) {
-            return clientErrorResponse(res, `Invalid params: ${ safeJSON(req.query) }`);
-        }
+      console.error(err.stack ? err.stack : err); // eslint-disable-line no-console
 
-        if (!preflight) {
-            return emptyResponse(res);
-        }
+      logger.error(req, _config.EVENT.ERROR, {
+        err: err.stack ? err.stack : err.toString()
+      });
+      return (0, _util.serverErrorResponse)(res, err.stack ? err.stack : err.toString());
+    } finally {
+      logBuffer.flush(req);
+    }
+  };
 
-        try {
-            return await preflight({ req, res, params, logBuffer });
+  const middleware = async (req, res) => {
+    const url = req.url.split('?')[0];
 
-        } catch (err) {
-            if (isError(err, ERROR_CODE.VALIDATION_ERROR)) {
-                logger.warn(req, EVENT.VALIDATION, { err: err.stack ? err.stack : err.toString() });
-                return clientErrorResponse(res, err.message);
-            }
+    if (url === '/') {
+      return await appMiddleware(req, res);
+    }
 
-            console.error(err.stack ? err.stack : err); // eslint-disable-line no-console
-            logger.error(req, EVENT.ERROR, { err: err.stack ? err.stack : err.toString() });
-            return serverErrorResponse(res, err.stack ? err.stack : err.toString());
+    if (url === '/script') {
+      res.header(_config.HTTP_HEADER.CACHE_CONTROL, `public, max-age=${_config.BROWSER_CACHE_TIME}`);
+      res.header(_config.HTTP_HEADER.EXPIRES, new Date(Date.now() + _config.BROWSER_CACHE_TIME * 1000).toUTCString());
+      return await scriptMiddleware(req, res);
+    }
 
-        } finally {
-            logBuffer.flush(req);
-        }
-    };
+    if (url === '/preload') {
+      return await preflightMiddleware(req, res);
+    }
 
-    const middleware = async (req : ExpressRequest, res : ExpressResponse) : Promise<void> => {
-        const url = req.url.split('?')[0];
+    res.status(404).send(`404 not found`);
+  };
 
-        if (url === '/') {
-            return await appMiddleware(req, res);
-        }
-
-        if (url === '/script') {
-            res.header(HTTP_HEADER.CACHE_CONTROL, `public, max-age=${ BROWSER_CACHE_TIME }`);
-            res.header(HTTP_HEADER.EXPIRES, new Date(Date.now() + (BROWSER_CACHE_TIME * 1000)).toUTCString());
-            return await scriptMiddleware(req, res);
-        }
-
-        if (url === '/preload') {
-            return await preflightMiddleware(req, res);
-        }
-
-        res.status(404).send(`404 not found`);
-    };
-
-    return middleware;
+  return middleware;
 }

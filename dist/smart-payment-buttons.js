@@ -104,11 +104,11 @@ window.spb = function(modules) {
         }([ function(E, N, S) {
             "use strict";
             S.r(N), S.d(N, "DEFAULT_COUNTRY", (function() {
-                return a;
+                return C;
             })), S.d(N, "DEFAULT_CURRENCY", (function() {
                 return u;
             })), S.d(N, "DEFAULT_INTENT", (function() {
-                return C;
+                return a;
             })), S.d(N, "DEFAULT_COMMIT", (function() {
                 return L;
             })), S.d(N, "DEFAULT_SALE_COMMIT", (function() {
@@ -116,21 +116,21 @@ window.spb = function(modules) {
             })), S.d(N, "DEFAULT_NONSALE_COMMIT", (function() {
                 return P;
             })), S.d(N, "DEFAULT_VAULT", (function() {
-                return U;
-            })), S.d(N, "DEFAULT_COMPONENTS", (function() {
                 return c;
+            })), S.d(N, "DEFAULT_COMPONENTS", (function() {
+                return U;
             })), S.d(N, "DEFAULT_DEBUG", (function() {
                 return G;
             })), S.d(N, "ENV", (function() {
-                return s;
-            })), S.d(N, "MOBILE_ENV", (function() {
                 return B;
+            })), S.d(N, "MOBILE_ENV", (function() {
+                return s;
             })), S.d(N, "ERROR_CODE", (function() {
                 return K;
             })), S.d(N, "FPTI_KEY", (function() {
-                return p;
-            })), S.d(N, "FPTI_USER_ACTION", (function() {
                 return f;
+            })), S.d(N, "FPTI_USER_ACTION", (function() {
+                return p;
             })), S.d(N, "FPTI_DATA_SOURCE", (function() {
                 return l;
             })), S.d(N, "FPTI_FEED", (function() {
@@ -160,27 +160,27 @@ window.spb = function(modules) {
             })), S.d(N, "VAULT", (function() {
                 return A;
             })), S.d(N, "CURRENCY", (function() {
-                return r;
-            })), S.d(N, "SDK_PATH", (function() {
                 return F;
+            })), S.d(N, "SDK_PATH", (function() {
+                return r;
             })), S.d(N, "SDK_SETTINGS", (function() {
-                return D;
-            })), S.d(N, "SDK_QUERY_KEYS", (function() {
-                return _;
-            })), S.d(N, "COMPONENTS", (function() {
                 return H;
+            })), S.d(N, "SDK_QUERY_KEYS", (function() {
+                return D;
+            })), S.d(N, "COMPONENTS", (function() {
+                return _;
             })), S.d(N, "DEBUG", (function() {
                 return I;
             })), S.d(N, "QUERY_BOOL", (function() {
                 return o;
             })), S.d(N, "UNKNOWN", (function() {
-                return O;
-            })), S.d(N, "PROTOCOL", (function() {
-                return i;
-            })), S.d(N, "PAGE_TYPES", (function() {
-                return M;
-            })), S.d(N, "MERCHANT_ID_MAX", (function() {
                 return Z;
+            })), S.d(N, "PROTOCOL", (function() {
+                return O;
+            })), S.d(N, "PAGE_TYPES", (function() {
+                return i;
+            })), S.d(N, "MERCHANT_ID_MAX", (function() {
+                return M;
             })), S.d(N, "PLATFORM", (function() {
                 return h;
             })), S.d(N, "TYPES", (function() {
@@ -472,7 +472,7 @@ window.spb = function(modules) {
                 CR: [ t.ES, t.EN, t.FR, t.ZH ],
                 CV: [ t.EN, t.FR, t.ES, t.ZH ],
                 CY: [ t.EN ],
-                CZ: [ t.CS, t.EN ],
+                CZ: [ t.CS, t.EN, t.FR, t.ES, t.ZH ],
                 DE: [ t.DE, t.EN ],
                 DJ: [ t.FR, t.EN, t.ES, t.ZH ],
                 DK: [ t.DA, t.EN ],
@@ -480,12 +480,12 @@ window.spb = function(modules) {
                 DO: [ t.ES, t.EN, t.FR, t.ZH ],
                 DZ: [ t.AR, t.EN, t.FR, t.ES, t.ZH ],
                 EC: [ t.ES, t.EN, t.FR, t.ZH ],
-                EE: [ t.ET, t.EN, t.RU ],
+                EE: [ t.ET, t.EN, t.RU, t.FR, t.ES, t.ZH ],
                 EG: [ t.AR, t.EN, t.FR, t.ES, t.ZH ],
                 ER: [ t.EN, t.FR, t.ES, t.ZH ],
                 ES: [ t.ES, t.EN ],
                 ET: [ t.EN, t.FR, t.ES, t.ZH ],
-                FI: [ t.FI, t.EN ],
+                FI: [ t.FI, t.EN, t.FR, t.ES, t.ZH ],
                 FJ: [ t.EN, t.FR, t.ES, t.ZH ],
                 FK: [ t.EN, t.FR, t.ES, t.ZH ],
                 FM: [ t.EN ],
@@ -501,14 +501,14 @@ window.spb = function(modules) {
                 GM: [ t.EN, t.FR, t.ES, t.ZH ],
                 GN: [ t.FR, t.EN, t.ES, t.ZH ],
                 GP: [ t.EN, t.FR, t.ES, t.ZH ],
-                GR: [ t.EL, t.EN ],
+                GR: [ t.EL, t.EN, t.FR, t.ES, t.ZH ],
                 GT: [ t.ES, t.EN, t.FR, t.ZH ],
                 GW: [ t.EN, t.FR, t.ES, t.ZH ],
                 GY: [ t.EN, t.FR, t.ES, t.ZH ],
                 HK: [ t.EN, t.ZH_HANT, t.ZH ],
                 HN: [ t.ES, t.EN, t.FR, t.ZH ],
                 HR: [ t.EN ],
-                HU: [ t.HU, t.EN ],
+                HU: [ t.HU, t.EN, t.FR, t.ES, t.ZH ],
                 ID: [ t.ID, t.EN ],
                 IE: [ t.EN, t.FR, t.ES, t.ZH ],
                 IL: [ t.HE, t.EN ],
@@ -533,9 +533,9 @@ window.spb = function(modules) {
                 LI: [ t.EN, t.FR, t.ES, t.ZH ],
                 LK: [ t.SI, t.EN ],
                 LS: [ t.EN, t.FR, t.ES, t.ZH ],
-                LT: [ t.LT, t.EN, t.RU, t.ZH ],
+                LT: [ t.LT, t.EN, t.RU, t.FR, t.ES, t.ZH ],
                 LU: [ t.EN, t.DE, t.FR, t.ES, t.ZH ],
-                LV: [ t.LV, t.EN, t.RU ],
+                LV: [ t.LV, t.EN, t.RU, t.FR, t.ES, t.ZH ],
                 MA: [ t.AR, t.EN, t.FR, t.ES, t.ZH ],
                 MC: [ t.FR, t.EN ],
                 MD: [ t.EN ],
@@ -581,7 +581,7 @@ window.spb = function(modules) {
                 PY: [ t.ES, t.EN ],
                 QA: [ t.EN, t.FR, t.ES, t.ZH, t.AR ],
                 RE: [ t.EN, t.FR, t.ES, t.ZH ],
-                RO: [ t.RO, t.EN ],
+                RO: [ t.RO, t.EN, t.FR, t.ES, t.ZH ],
                 RS: [ t.EN, t.FR, t.ES, t.ZH ],
                 RU: [ t.RU, t.EN ],
                 RW: [ t.FR, t.EN, t.ES, t.ZH ],
@@ -591,9 +591,9 @@ window.spb = function(modules) {
                 SE: [ t.SV, t.EN ],
                 SG: [ t.EN ],
                 SH: [ t.EN, t.FR, t.ES, t.ZH ],
-                SI: [ t.SL, t.EN ],
+                SI: [ t.SL, t.EN, t.FR, t.ES, t.ZH ],
                 SJ: [ t.EN, t.FR, t.ES, t.ZH ],
-                SK: [ t.SK, t.EN ],
+                SK: [ t.SK, t.EN, t.FR, t.ES, t.ZH ],
                 SL: [ t.EN, t.FR, t.ES, t.ZH ],
                 SM: [ t.EN, t.FR, t.ES, t.ZH ],
                 SN: [ t.FR, t.EN, t.ES, t.ZH ],
@@ -644,7 +644,7 @@ window.spb = function(modules) {
             }, A = {
                 TRUE: !0,
                 FALSE: !1
-            }, r = {
+            }, F = {
                 AED: "AED",
                 ALL: "ALL",
                 ANG: "ANG",
@@ -747,7 +747,7 @@ window.spb = function(modules) {
                 XAF: "XAF",
                 XCD: "XCD",
                 YER: "YER"
-            }, F = "/sdk/js", D = {
+            }, r = "/sdk/js", H = {
                 NAMESPACE: "data-namespace",
                 CLIENT_TOKEN: "data-client-token",
                 MERCHANT_ID: "data-merchant-id",
@@ -761,9 +761,8 @@ window.spb = function(modules) {
                 AMOUNT: "data-amount",
                 CLIENT_METADATA_ID: "data-client-metadata-id",
                 PAGE_TYPE: "data-page-type",
-                USER_EXPERIENCE_FLOW: "data-user-experience-flow",
-                DATA_POPUPS_DISABLED: "data-popups-disabled"
-            }, _ = {
+                USER_EXPERIENCE_FLOW: "data-user-experience-flow"
+            }, D = {
                 COMPONENTS: "components",
                 ENV: "env",
                 DEBUG: "debug",
@@ -784,7 +783,7 @@ window.spb = function(modules) {
                 STAGE_ALIAS: "stage-alias",
                 CDN_REGISTRY: "cdn-registry",
                 VERSION: "version"
-            }, H = {
+            }, _ = {
                 BUTTONS: "buttons",
                 HOSTED_FIELDS: "hosted-fields"
             }, I = {
@@ -793,10 +792,10 @@ window.spb = function(modules) {
             }, o = {
                 TRUE: "true",
                 FALSE: "false"
-            }, O = "unknown", i = {
+            }, Z = "unknown", O = {
                 HTTP: "http",
                 HTTPS: "https"
-            }, M = {
+            }, i = {
                 HOME: "home",
                 PRODUCT: "product",
                 CART: "cart",
@@ -805,18 +804,18 @@ window.spb = function(modules) {
                 SEARCH_RESULTS: "search-results",
                 PRODUCT_DETAILS: "product-details",
                 MINI_CART: "mini-cart"
-            }, Z = 10, a = R.US, u = r.USD, C = e.CAPTURE, L = n.TRUE, d = n.TRUE, P = n.TRUE, U = A.FALSE, c = H.BUTTONS, G = I.FALSE, s = {
+            }, M = 10, C = R.US, u = F.USD, a = e.CAPTURE, L = n.TRUE, d = n.TRUE, P = n.TRUE, c = A.FALSE, U = _.BUTTONS, G = I.FALSE, B = {
                 LOCAL: "local",
                 STAGE: "stage",
                 SANDBOX: "sandbox",
                 PRODUCTION: "production",
                 TEST: "test"
-            }, B = {
+            }, s = {
                 ANDROID: "android",
                 IOS: "iOS"
             }, K = {
                 VALIDATION_ERROR: "validation_error"
-            }, p = {
+            }, f = {
                 FEED: "feed_name",
                 STATE: "state_name",
                 TRANSITION: "transition_name",
@@ -875,7 +874,7 @@ window.spb = function(modules) {
                 TIMESTAMP: "t",
                 OPTION_SELECTED: "optsel",
                 USER_IDENTITY_METHOD: "user_identity_method"
-            }, f = {
+            }, p = {
                 COMMIT: "commit",
                 CONTINUE: "continue"
             }, l = {
@@ -928,7 +927,6 @@ window.spb = function(modules) {
                 BANK: "bank",
                 CREDIT: "credit"
             }, J = {
-                PAY_IN_3: "payIn3",
                 PAY_IN_4: "payIn4",
                 PAYLATER: "paylater",
                 CREDIT: "credit"
@@ -3391,13 +3389,11 @@ window.spb = function(modules) {
                 return PopupOpenError;
             }(util_ExtendableError);
             function popup(url, options) {
-                var _options$closeOnUnloa = (options = options || {}).closeOnUnload, closeOnUnload = void 0 === _options$closeOnUnloa ? 1 : _options$closeOnUnloa, _options$name = options.name, name = void 0 === _options$name ? "" : _options$name, width = options.width, height = options.height;
+                var width = (options = options || {}).width, height = options.height;
                 var top = 0;
                 var left = 0;
                 width && (window.outerWidth ? left = Math.round((window.outerWidth - width) / 2) + window.screenX : window.screen.width && (left = Math.round((window.screen.width - width) / 2)));
                 height && (window.outerHeight ? top = Math.round((window.outerHeight - height) / 2) + window.screenY : window.screen.height && (top = Math.round((window.screen.height - height) / 2)));
-                delete options.closeOnUnload;
-                delete options.name;
                 width && height && (options = _extends({
                     top: top,
                     left: left,
@@ -3409,6 +3405,8 @@ window.spb = function(modules) {
                     resizable: 1,
                     scrollbars: 1
                 }, options));
+                var name = options.name || "";
+                delete options.name;
                 var params = Object.keys(options).map((function(key) {
                     if (null != options[key]) return key + "=" + stringify(options[key]);
                 })).filter(Boolean).join(",");
@@ -3422,7 +3420,7 @@ window.spb = function(modules) {
                     var err;
                     throw new dom_PopupOpenError("Can not open popup window - blocked");
                 }
-                closeOnUnload && window.addEventListener("unload", (function() {
+                window.addEventListener("unload", (function() {
                     return win.close();
                 }));
                 return win;
@@ -4856,6 +4854,15 @@ window.spb = function(modules) {
             }(cardNumber, pattern);
         };
     },
+    "./server/components/native/constants.js": function(module, exports, __webpack_require__) {
+        "use strict";
+        exports.__esModule = !0;
+        exports.CHANNEL = void 0;
+        exports.CHANNEL = {
+            DESKTOP: "desktop-web",
+            MOBILE: "mobile-web"
+        };
+    },
     "./src/button/index.js": function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         __webpack_require__.r(__webpack_exports__);
@@ -5155,10 +5162,6 @@ window.spb = function(modules) {
                 if ("undefined" == typeof Promise) throw new TypeError("Could not find Promise");
                 return Promise.resolve(this);
             };
-            _proto.lazy = function() {
-                this.errorHandled = !0;
-                return this;
-            };
             ZalgoPromise.resolve = function(value) {
                 return value instanceof ZalgoPromise ? value : utils_isPromise(value) ? new ZalgoPromise((function(resolve, reject) {
                     return value.then(resolve, reject);
@@ -5264,21 +5267,9 @@ window.spb = function(modules) {
             return ZalgoPromise;
         }();
         var IE_WIN_ACCESS_ERROR = "Call was rejected by callee.\r\n";
-        function getActualProtocol(win) {
-            void 0 === win && (win = window);
-            return win.location.protocol;
-        }
-        function getProtocol(win) {
-            void 0 === win && (win = window);
-            if (win.mockDomain) {
-                var protocol = win.mockDomain.split("//")[0];
-                if (protocol) return protocol;
-            }
-            return getActualProtocol(win);
-        }
         function isAboutProtocol(win) {
             void 0 === win && (win = window);
-            return "about:" === getProtocol(win);
+            return "about:" === win.location.protocol;
         }
         function utils_getParent(win) {
             void 0 === win && (win = window);
@@ -5296,7 +5287,7 @@ window.spb = function(modules) {
             void 0 === win && (win = window);
             var location = win.location;
             if (!location) throw new Error("Can not read window location");
-            var protocol = getActualProtocol(win);
+            var protocol = location.protocol;
             if (!protocol) throw new Error("Can not read window protocol");
             if ("file:" === protocol) return "file://";
             if ("about:" === protocol) {
@@ -5323,12 +5314,6 @@ window.spb = function(modules) {
                 } catch (err) {}
                 try {
                     if (isAboutProtocol(win) && canReadFromWindow()) return !0;
-                } catch (err) {}
-                try {
-                    if (function(win) {
-                        void 0 === win && (win = window);
-                        return "mock:" === getProtocol(win);
-                    }(win) && canReadFromWindow()) return !0;
                 } catch (err) {}
                 try {
                     if (getActualDomain(win) === getActualDomain(window)) return !0;
@@ -6016,13 +6001,11 @@ window.spb = function(modules) {
             return PopupOpenError;
         }(util_ExtendableError);
         function popup(url, options) {
-            var _options$closeOnUnloa = (options = options || {}).closeOnUnload, closeOnUnload = void 0 === _options$closeOnUnloa ? 1 : _options$closeOnUnloa, _options$name = options.name, name = void 0 === _options$name ? "" : _options$name, width = options.width, height = options.height;
+            var width = (options = options || {}).width, height = options.height;
             var top = 0;
             var left = 0;
             width && (window.outerWidth ? left = Math.round((window.outerWidth - width) / 2) + window.screenX : window.screen.width && (left = Math.round((window.screen.width - width) / 2)));
             height && (window.outerHeight ? top = Math.round((window.outerHeight - height) / 2) + window.screenY : window.screen.height && (top = Math.round((window.screen.height - height) / 2)));
-            delete options.closeOnUnload;
-            delete options.name;
             width && height && (options = _extends({
                 top: top,
                 left: left,
@@ -6034,6 +6017,8 @@ window.spb = function(modules) {
                 resizable: 1,
                 scrollbars: 1
             }, options));
+            var name = options.name || "";
+            delete options.name;
             var params = Object.keys(options).map((function(key) {
                 if (null != options[key]) return key + "=" + ("string" == typeof (item = options[key]) ? item : item && item.toString && "function" == typeof item.toString ? item.toString() : {}.toString.call(item));
                 var item;
@@ -6048,7 +6033,7 @@ window.spb = function(modules) {
                 var err;
                 throw new dom_PopupOpenError("Can not open popup window - blocked");
             }
-            closeOnUnload && window.addEventListener("unload", (function() {
+            window.addEventListener("unload", (function() {
                 return win.close();
             }));
             return win;
@@ -7108,7 +7093,7 @@ window.spb = function(modules) {
             logger_getLogger().info("rest_api_create_order_token");
             var headers = ((_headers15 = {}).authorization = "Bearer " + accessToken, _headers15["paypal-partner-attribution-id"] = partnerAttributionID, 
             _headers15["paypal-client-metadata-id"] = clientMetadataID, _headers15["x-app-name"] = "smart-payment-buttons", 
-            _headers15["x-app-version"] = "5.0.77", _headers15);
+            _headers15["x-app-version"] = "5.0.78", _headers15);
             var paymentSource = {
                 token: {
                     id: paymentMethodID,
@@ -9075,28 +9060,7 @@ window.spb = function(modules) {
             if ("function" == typeof element) return new node_ComponentNode(element, props, children);
             throw new TypeError("Expected jsx element to be a string or a function");
         };
-        var _ELEMENT_DEFAULT_XML_, _ATTRIBUTE_DEFAULT_XM, _ADD_CHILDREN;
-        var ELEMENT_DEFAULT_XML_NAMESPACE = ((_ELEMENT_DEFAULT_XML_ = {}).svg = "http://www.w3.org/2000/svg", 
-        _ELEMENT_DEFAULT_XML_);
-        var ATTRIBUTE_DEFAULT_XML_NAMESPACE = ((_ATTRIBUTE_DEFAULT_XM = {})["xlink:href"] = "http://www.w3.org/1999/xlink", 
-        _ATTRIBUTE_DEFAULT_XM);
-        function createTextElement(doc, node) {
-            return doc.createTextNode(node.text);
-        }
-        function addProps(el, node) {
-            var props = node.props;
-            for (var _i4 = 0, _Object$keys2 = Object.keys(props); _i4 < _Object$keys2.length; _i4++) {
-                var prop = _Object$keys2[_i4];
-                var val = props[prop];
-                if (null != val && "el" !== prop && "innerHTML" !== prop) if (prop.match(/^on[A-Z][a-z]/) && "function" == typeof val) el.addEventListener(prop.slice(2).toLowerCase(), val); else if ("string" == typeof val || "number" == typeof val) {
-                    var xmlNamespace = ATTRIBUTE_DEFAULT_XML_NAMESPACE[prop];
-                    xmlNamespace ? el.setAttributeNS(xmlNamespace, prop, val.toString()) : el.setAttribute(prop, val.toString());
-                } else "boolean" == typeof val && !0 === val && el.setAttribute(prop, "");
-            }
-            "iframe" !== el.tagName.toLowerCase() || props.id || el.setAttribute("id", "jsx-iframe-" + "xxxxxxxxxx".replace(/./g, (function() {
-                return "0123456789abcdef".charAt(Math.floor(Math.random() * "0123456789abcdef".length));
-            })));
-        }
+        var _ADD_CHILDREN;
         var ADD_CHILDREN = ((_ADD_CHILDREN = {}).iframe = function(el, node) {
             var firstChild = node.children[0];
             if (1 !== node.children.length || !firstChild || "element" !== firstChild.type || "html" !== firstChild.name) throw new Error("Expected only single html element node as child of iframe element");
@@ -9118,58 +9082,51 @@ window.spb = function(modules) {
         }, _ADD_CHILDREN.default = function(el, node, renderer) {
             for (var _i6 = 0, _node$renderChildren2 = node.renderChildren(renderer); _i6 < _node$renderChildren2.length; _i6++) el.appendChild(_node$renderChildren2[_i6]);
         }, _ADD_CHILDREN);
-        function addChildren(el, node, doc, renderer) {
-            if (node.props.hasOwnProperty("innerHTML")) {
-                if (node.children.length) throw new Error("Expected no children to be passed when innerHTML prop is set");
-                var html = node.props.innerHTML;
-                if ("string" != typeof html) throw new TypeError("innerHTML prop must be string");
-                if ("script" === node.name) el.text = html; else {
-                    el.innerHTML = html;
-                    !function(el, doc) {
-                        void 0 === doc && (doc = window.document);
-                        for (var _i2 = 0, _el$querySelectorAll2 = el.querySelectorAll("script"); _i2 < _el$querySelectorAll2.length; _i2++) {
-                            var script = _el$querySelectorAll2[_i2];
-                            var parentNode = script.parentNode;
-                            if (parentNode) {
-                                var newScript = doc.createElement("script");
-                                newScript.text = script.textContent;
-                                parentNode.replaceChild(newScript, script);
-                            }
-                        }
-                    }(el, doc);
-                }
-            } else (ADD_CHILDREN[node.name] || ADD_CHILDREN.default)(el, node, renderer);
-        }
         function dom(opts) {
             void 0 === opts && (opts = {});
             var _opts$doc = opts.doc, doc = void 0 === _opts$doc ? document : _opts$doc;
             return function domRenderer(node) {
                 if ("component" === node.type) return node.renderComponent(domRenderer);
-                if ("text" === node.type) return createTextElement(doc, node);
+                if ("text" === node.type) return function(doc, node) {
+                    return doc.createTextNode(node.text);
+                }(doc, node);
                 if ("element" === node.type) {
-                    var xmlNamespace = ELEMENT_DEFAULT_XML_NAMESPACE[node.name.toLowerCase()];
-                    if (xmlNamespace) return function xmlNamespaceDomRenderer(node, xmlNamespace) {
-                        if ("component" === node.type) return node.renderComponent((function(childNode) {
-                            return xmlNamespaceDomRenderer(childNode, xmlNamespace);
-                        }));
-                        if ("text" === node.type) return createTextElement(doc, node);
-                        if ("element" === node.type) {
-                            var el = function(doc, node, xmlNamespace) {
-                                return doc.createElementNS(xmlNamespace, node.name);
-                            }(doc, node, xmlNamespace);
-                            addProps(el, node);
-                            addChildren(el, node, doc, (function(childNode) {
-                                return xmlNamespaceDomRenderer(childNode, xmlNamespace);
-                            }));
-                            return el;
-                        }
-                        throw new TypeError("Unhandleable node");
-                    }(node, xmlNamespace);
                     var el = function(doc, node) {
                         return node.props.el ? node.props.el : doc.createElement(node.name);
                     }(doc, node);
-                    addProps(el, node);
-                    addChildren(el, node, doc, domRenderer);
+                    !function(el, node) {
+                        var props = node.props;
+                        for (var _i4 = 0, _Object$keys2 = Object.keys(props); _i4 < _Object$keys2.length; _i4++) {
+                            var prop = _Object$keys2[_i4];
+                            var val = props[prop];
+                            null != val && "el" !== prop && "innerHTML" !== prop && (prop.match(/^on[A-Z][a-z]/) && "function" == typeof val ? el.addEventListener(prop.slice(2).toLowerCase(), val) : "string" == typeof val || "number" == typeof val ? el.setAttribute(prop, val.toString()) : "boolean" == typeof val && !0 === val && el.setAttribute(prop, ""));
+                        }
+                        "iframe" !== el.tagName.toLowerCase() || props.id || el.setAttribute("id", "jsx-iframe-" + "xxxxxxxxxx".replace(/./g, (function() {
+                            return "0123456789abcdef".charAt(Math.floor(Math.random() * "0123456789abcdef".length));
+                        })));
+                    }(el, node);
+                    !function(el, node, doc, renderer) {
+                        if (node.props.hasOwnProperty("innerHTML")) {
+                            if (node.children.length) throw new Error("Expected no children to be passed when innerHTML prop is set");
+                            var html = node.props.innerHTML;
+                            if ("string" != typeof html) throw new TypeError("innerHTML prop must be string");
+                            if ("script" === node.name) el.text = html; else {
+                                el.innerHTML = html;
+                                !function(el, doc) {
+                                    void 0 === doc && (doc = window.document);
+                                    for (var _i2 = 0, _el$querySelectorAll2 = el.querySelectorAll("script"); _i2 < _el$querySelectorAll2.length; _i2++) {
+                                        var script = _el$querySelectorAll2[_i2];
+                                        var parentNode = script.parentNode;
+                                        if (parentNode) {
+                                            var newScript = doc.createElement("script");
+                                            newScript.text = script.textContent;
+                                            parentNode.replaceChild(newScript, script);
+                                        }
+                                    }
+                                }(el, doc);
+                            }
+                        } else (ADD_CHILDREN[node.name] || ADD_CHILDREN.default)(el, node, renderer);
+                    }(el, node, doc, domRenderer);
                     return el;
                 }
                 throw new TypeError("Unhandleable node");
@@ -9994,15 +9951,15 @@ window.spb = function(modules) {
                 var payment = _ref2.payment;
                 return !(payment.win || !payment.paymentMethodID || window.innerWidth < 250 && "paypal" === payment.fundingSource);
             },
-            init: function(_ref7) {
-                var props = _ref7.props, components = _ref7.components, payment = _ref7.payment, serviceData = _ref7.serviceData, config = _ref7.config;
+            init: function(_ref8) {
+                var props = _ref8.props, components = _ref8.components, payment = _ref8.payment, serviceData = _ref8.serviceData, config = _ref8.config;
                 var createOrder = props.createOrder, onApprove = props.onApprove, clientAccessToken = props.clientAccessToken, enableThreeDomainSecure = props.enableThreeDomainSecure, partnerAttributionID = props.partnerAttributionID, getParent = props.getParent, userIDToken = props.userIDToken, clientID = props.clientID, env = props.env;
                 var ThreeDomainSecure = components.ThreeDomainSecure, Installments = components.Installments;
                 var fundingSource = payment.fundingSource, paymentMethodID = payment.paymentMethodID, button = payment.button;
                 var facilitatorAccessToken = serviceData.facilitatorAccessToken, buyerCountry = serviceData.buyerCountry;
                 var cspNonce = config.cspNonce;
-                var clientMetadataID = function(_ref6) {
-                    var props = _ref6.props;
+                var clientMetadataID = function(_ref7) {
+                    var props = _ref7.props;
                     return props.clientMetadataID || props.sessionID;
                 }({
                     props: props
@@ -10032,9 +9989,9 @@ window.spb = function(modules) {
                             installmentPlan: installmentPlan
                         }),
                         requireShipping: shippingRequired(orderID)
-                    }).then((function(_ref8) {
-                        var validate = _ref8.validate;
-                        if (_ref8.requireShipping) {
+                    }).then((function(_ref9) {
+                        var validate = _ref9.validate;
+                        if (_ref9.requireShipping) {
                             if ("paypal" !== fundingSource) throw new Error("Shipping address requested for " + fundingSource + " payment");
                             return function() {
                                 logger_getLogger().info("web_checkout_fallback").flush();
@@ -10079,7 +10036,13 @@ window.spb = function(modules) {
                                     createOrder: createOrder,
                                     getParent: getParent
                                 });
-                                if (200 !== status) throw new Error("Validate payment failed with status: " + status);
+                                if (200 !== status) {
+                                    if (Array.isArray(body.details)) {
+                                        var _ref6$issue = (body.details && body.details[0] || {}).issue, issue = void 0 === _ref6$issue ? "" : _ref6$issue;
+                                        if (0 === issue.trim().length) throw new Error("Validate payment failed with issue: " + issue);
+                                    }
+                                    throw new Error("Validate payment failed with status: " + status);
+                                }
                             }));
                         }({
                             ThreeDomainSecure: ThreeDomainSecure,
@@ -10279,8 +10242,8 @@ window.spb = function(modules) {
                     }
                 };
             },
-            setupMenu: function(_ref9) {
-                var props = _ref9.props, payment = _ref9.payment, serviceData = _ref9.serviceData, components = _ref9.components, config = _ref9.config, restart = _ref9.restart;
+            setupMenu: function(_ref10) {
+                var props = _ref10.props, payment = _ref10.payment, serviceData = _ref10.serviceData, components = _ref10.components, config = _ref10.config, restart = _ref10.restart;
                 var clientAccessToken = props.clientAccessToken, createOrder = props.createOrder, enableThreeDomainSecure = props.enableThreeDomainSecure, partnerAttributionID = props.partnerAttributionID, sessionID = props.sessionID, clientMetadataID = props.clientMetadataID, userIDToken = props.userIDToken;
                 var fundingSource = payment.fundingSource, paymentMethodID = payment.paymentMethodID, button = payment.button;
                 var content = serviceData.content, facilitatorAccessToken = serviceData.facilitatorAccessToken;
@@ -10296,22 +10259,22 @@ window.spb = function(modules) {
                         });
                     }));
                 };
-                var loadCheckout = function(_ref10) {
+                var loadCheckout = function(_ref11) {
                     return checkout.init({
                         props: props,
                         components: components,
                         serviceData: serviceData,
                         config: config,
-                        payment: _ref10.payment,
+                        payment: _ref11.payment,
                         restart: restart
                     }).start();
                 };
                 if ("paypal" === fundingSource) return [ {
                     label: content.payWithDifferentMethod,
                     popup: POPUP_OPTIONS,
-                    onSelect: function(_ref11) {
+                    onSelect: function(_ref12) {
                         var _getLogger$info$track2;
-                        var win = _ref11.win;
+                        var win = _ref12.win;
                         logger_getLogger().info("click_choose_funding").track((_getLogger$info$track2 = {}, 
                         _getLogger$info$track2.transition_name = "process_click_pay_with_different_payment_method", 
                         _getLogger$info$track2.optsel = "pay_with_different_payment_method", _getLogger$info$track2)).flush();
@@ -10343,9 +10306,9 @@ window.spb = function(modules) {
                 }, {
                     label: content.payWithDifferentAccount,
                     popup: POPUP_OPTIONS,
-                    onSelect: function(_ref12) {
+                    onSelect: function(_ref13) {
                         var _getLogger$info$track3;
-                        var win = _ref12.win;
+                        var win = _ref13.win;
                         logger_getLogger().info("click_choose_account").track((_getLogger$info$track3 = {}, 
                         _getLogger$info$track3.transition_name = "process_click_pay_with_different_account", 
                         _getLogger$info$track3.optsel = "pay_with_different_account", _getLogger$info$track3)).flush();
@@ -10391,10 +10354,10 @@ window.spb = function(modules) {
                 } ];
                 throw new Error("Can not render menu for " + fundingSource);
             },
-            updateFlowClientConfig: function(_ref13) {
+            updateFlowClientConfig: function(_ref14) {
                 return updateButtonClientConfig({
-                    fundingSource: _ref13.payment.fundingSource,
-                    orderID: _ref13.orderID,
+                    fundingSource: _ref14.payment.fundingSource,
+                    orderID: _ref14.orderID,
                     inline: !0
                 });
             },
@@ -10706,6 +10669,7 @@ window.spb = function(modules) {
             }
             return !1;
         }
+        var constants = __webpack_require__("./server/components/native/constants.js");
         function getNativeDomain(_ref) {
             var props = _ref.props;
             var env = props.env;
@@ -10826,7 +10790,7 @@ window.spb = function(modules) {
             var forceEligible = isNativeOptedIn({
                 props: props
             });
-            var channel = isDevice() ? "mobile-web" : "desktop-web";
+            var channel = isDevice() ? constants.CHANNEL.MOBILE : constants.CHANNEL.DESKTOP;
             if (!firebase) throw new Error("Can not find firebase config");
             var queryParams = {
                 channel: channel,
@@ -10851,7 +10815,7 @@ window.spb = function(modules) {
                 buyerCountry: buyerCountry,
                 sdkVersion: sdkVersion
             };
-            "desktop-web" === queryParams.channel && delete queryParams.sdkMeta;
+            queryParams.channel === constants.CHANNEL.DESKTOP && delete queryParams.sdkMeta;
             return queryParams;
         }
         function getNativeUrl(_ref5) {
@@ -11519,7 +11483,7 @@ window.spb = function(modules) {
                                     buttonSessionID: buttonSessionID,
                                     buyerCountry: buyerCountry,
                                     clientID: clientID,
-                                    channel: isDevice() ? "mobile-web" : "desktop-web",
+                                    channel: isDevice() ? constants.CHANNEL.MOBILE : constants.CHANNEL.DESKTOP,
                                     env: env,
                                     parentDomain: parentDomain,
                                     sdkCorrelationID: sdkCorrelationID,
@@ -13356,7 +13320,7 @@ window.spb = function(modules) {
                 logger.addTrackingBuilder((function() {
                     var _ref3;
                     return (_ref3 = {}).state_name = "smart_button", _ref3.context_type = "button_session_id", 
-                    _ref3.context_id = buttonSessionID, _ref3.button_session_id = buttonSessionID, _ref3.button_version = "5.0.77", 
+                    _ref3.context_id = buttonSessionID, _ref3.button_session_id = buttonSessionID, _ref3.button_version = "5.0.78", 
                     _ref3.button_correlation_id = buttonCorrelationID, _ref3.stickiness_id = isAndroidChrome() ? stickinessID : null, 
                     _ref3.bn_code = partnerAttributionID, _ref3.user_action = commit ? "commit" : "continue", 
                     _ref3.seller_id = merchantID[0], _ref3.merchant_domain = merchantDomain, _ref3.t = Date.now().toString(), 

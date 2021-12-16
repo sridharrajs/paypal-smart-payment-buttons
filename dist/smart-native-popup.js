@@ -2511,13 +2511,11 @@
                 return PopupOpenError;
             }(util_ExtendableError);
             function popup(url, options) {
-                var _options$closeOnUnloa = (options = options || {}).closeOnUnload, closeOnUnload = void 0 === _options$closeOnUnloa ? 1 : _options$closeOnUnloa, _options$name = options.name, name = void 0 === _options$name ? "" : _options$name, width = options.width, height = options.height;
+                var width = (options = options || {}).width, height = options.height;
                 var top = 0;
                 var left = 0;
                 width && (window.outerWidth ? left = Math.round((window.outerWidth - width) / 2) + window.screenX : window.screen.width && (left = Math.round((window.screen.width - width) / 2)));
                 height && (window.outerHeight ? top = Math.round((window.outerHeight - height) / 2) + window.screenY : window.screen.height && (top = Math.round((window.screen.height - height) / 2)));
-                delete options.closeOnUnload;
-                delete options.name;
                 width && height && (options = _extends({
                     top: top,
                     left: left,
@@ -2529,6 +2527,8 @@
                     resizable: 1,
                     scrollbars: 1
                 }, options));
+                var name = options.name || "";
+                delete options.name;
                 var params = Object.keys(options).map((function(key) {
                     if (null != options[key]) return key + "=" + stringify(options[key]);
                 })).filter(Boolean).join(",");
@@ -2542,7 +2542,7 @@
                     var err;
                     throw new dom_PopupOpenError("Can not open popup window - blocked");
                 }
-                closeOnUnload && window.addEventListener("unload", (function() {
+                window.addEventListener("unload", (function() {
                     return win.close();
                 }));
                 return win;
@@ -3689,10 +3689,6 @@
                 if ("undefined" == typeof Promise) throw new TypeError("Could not find Promise");
                 return Promise.resolve(this);
             };
-            _proto.lazy = function() {
-                this.errorHandled = !0;
-                return this;
-            };
             ZalgoPromise.resolve = function(value) {
                 return value instanceof ZalgoPromise ? value : utils_isPromise(value) ? new ZalgoPromise((function(resolve, reject) {
                     return value.then(resolve, reject);
@@ -3798,21 +3794,9 @@
             return ZalgoPromise;
         }();
         var IE_WIN_ACCESS_ERROR = "Call was rejected by callee.\r\n";
-        function getActualProtocol(win) {
-            void 0 === win && (win = window);
-            return win.location.protocol;
-        }
-        function getProtocol(win) {
-            void 0 === win && (win = window);
-            if (win.mockDomain) {
-                var protocol = win.mockDomain.split("//")[0];
-                if (protocol) return protocol;
-            }
-            return getActualProtocol(win);
-        }
         function isAboutProtocol(win) {
             void 0 === win && (win = window);
-            return "about:" === getProtocol(win);
+            return "about:" === win.location.protocol;
         }
         function canReadFromWindow(win) {
             try {
@@ -3824,7 +3808,7 @@
             void 0 === win && (win = window);
             var location = win.location;
             if (!location) throw new Error("Can not read window location");
-            var protocol = getActualProtocol(win);
+            var protocol = location.protocol;
             if (!protocol) throw new Error("Can not read window protocol");
             if ("file:" === protocol) return "file://";
             if ("about:" === protocol) {
@@ -3856,12 +3840,6 @@
                 } catch (err) {}
                 try {
                     if (isAboutProtocol(win) && canReadFromWindow()) return !0;
-                } catch (err) {}
-                try {
-                    if (function(win) {
-                        void 0 === win && (win = window);
-                        return "mock:" === getProtocol(win);
-                    }(win) && canReadFromWindow()) return !0;
                 } catch (err) {}
                 try {
                     if (getActualDomain(win) === getActualDomain(window)) return !0;
@@ -4817,7 +4795,7 @@
                 logger.addTrackingBuilder((function() {
                     var _ref3;
                     return (_ref3 = {}).state_name = "smart_button", _ref3.context_type = "button_session_id", 
-                    _ref3.context_id = buttonSessionID, _ref3.button_session_id = buttonSessionID, _ref3.button_version = "5.0.77", 
+                    _ref3.context_id = buttonSessionID, _ref3.button_session_id = buttonSessionID, _ref3.button_version = "5.0.78", 
                     _ref3.user_id = buttonSessionID, _ref3;
                 }));
                 (function() {
@@ -5272,28 +5250,7 @@
         var Fragment = function(props, children) {
             return children;
         };
-        var _ELEMENT_DEFAULT_XML_, _ATTRIBUTE_DEFAULT_XM, _ADD_CHILDREN;
-        var ELEMENT_DEFAULT_XML_NAMESPACE = ((_ELEMENT_DEFAULT_XML_ = {}).svg = "http://www.w3.org/2000/svg", 
-        _ELEMENT_DEFAULT_XML_);
-        var ATTRIBUTE_DEFAULT_XML_NAMESPACE = ((_ATTRIBUTE_DEFAULT_XM = {})["xlink:href"] = "http://www.w3.org/1999/xlink", 
-        _ATTRIBUTE_DEFAULT_XM);
-        function createTextElement(doc, node) {
-            return doc.createTextNode(node.text);
-        }
-        function addProps(el, node) {
-            var props = node.props;
-            for (var _i4 = 0, _Object$keys2 = Object.keys(props); _i4 < _Object$keys2.length; _i4++) {
-                var prop = _Object$keys2[_i4];
-                var val = props[prop];
-                if (null != val && "el" !== prop && "innerHTML" !== prop) if (prop.match(/^on[A-Z][a-z]/) && "function" == typeof val) el.addEventListener(prop.slice(2).toLowerCase(), val); else if ("string" == typeof val || "number" == typeof val) {
-                    var xmlNamespace = ATTRIBUTE_DEFAULT_XML_NAMESPACE[prop];
-                    xmlNamespace ? el.setAttributeNS(xmlNamespace, prop, val.toString()) : el.setAttribute(prop, val.toString());
-                } else "boolean" == typeof val && !0 === val && el.setAttribute(prop, "");
-            }
-            "iframe" !== el.tagName.toLowerCase() || props.id || el.setAttribute("id", "jsx-iframe-" + "xxxxxxxxxx".replace(/./g, (function() {
-                return "0123456789abcdef".charAt(Math.floor(Math.random() * "0123456789abcdef".length));
-            })));
-        }
+        var _ADD_CHILDREN;
         var ADD_CHILDREN = ((_ADD_CHILDREN = {}).iframe = function(el, node) {
             var firstChild = node.children[0];
             if (1 !== node.children.length || !firstChild || "element" !== firstChild.type || "html" !== firstChild.name) throw new Error("Expected only single html element node as child of iframe element");
@@ -5308,31 +5265,46 @@
                     var _opts$doc = opts.doc, doc = void 0 === _opts$doc ? document : _opts$doc;
                     return function domRenderer(node) {
                         if ("component" === node.type) return node.renderComponent(domRenderer);
-                        if ("text" === node.type) return createTextElement(doc, node);
+                        if ("text" === node.type) return function(doc, node) {
+                            return doc.createTextNode(node.text);
+                        }(doc, node);
                         if ("element" === node.type) {
-                            var xmlNamespace = ELEMENT_DEFAULT_XML_NAMESPACE[node.name.toLowerCase()];
-                            if (xmlNamespace) return function xmlNamespaceDomRenderer(node, xmlNamespace) {
-                                if ("component" === node.type) return node.renderComponent((function(childNode) {
-                                    return xmlNamespaceDomRenderer(childNode, xmlNamespace);
-                                }));
-                                if ("text" === node.type) return createTextElement(doc, node);
-                                if ("element" === node.type) {
-                                    var el = function(doc, node, xmlNamespace) {
-                                        return doc.createElementNS(xmlNamespace, node.name);
-                                    }(doc, node, xmlNamespace);
-                                    addProps(el, node);
-                                    addChildren(el, node, doc, (function(childNode) {
-                                        return xmlNamespaceDomRenderer(childNode, xmlNamespace);
-                                    }));
-                                    return el;
-                                }
-                                throw new TypeError("Unhandleable node");
-                            }(node, xmlNamespace);
                             var el = function(doc, node) {
                                 return node.props.el ? node.props.el : doc.createElement(node.name);
                             }(doc, node);
-                            addProps(el, node);
-                            addChildren(el, node, doc, domRenderer);
+                            !function(el, node) {
+                                var props = node.props;
+                                for (var _i4 = 0, _Object$keys2 = Object.keys(props); _i4 < _Object$keys2.length; _i4++) {
+                                    var prop = _Object$keys2[_i4];
+                                    var val = props[prop];
+                                    null != val && "el" !== prop && "innerHTML" !== prop && (prop.match(/^on[A-Z][a-z]/) && "function" == typeof val ? el.addEventListener(prop.slice(2).toLowerCase(), val) : "string" == typeof val || "number" == typeof val ? el.setAttribute(prop, val.toString()) : "boolean" == typeof val && !0 === val && el.setAttribute(prop, ""));
+                                }
+                                "iframe" !== el.tagName.toLowerCase() || props.id || el.setAttribute("id", "jsx-iframe-" + "xxxxxxxxxx".replace(/./g, (function() {
+                                    return "0123456789abcdef".charAt(Math.floor(Math.random() * "0123456789abcdef".length));
+                                })));
+                            }(el, node);
+                            !function(el, node, doc, renderer) {
+                                if (node.props.hasOwnProperty("innerHTML")) {
+                                    if (node.children.length) throw new Error("Expected no children to be passed when innerHTML prop is set");
+                                    var html = node.props.innerHTML;
+                                    if ("string" != typeof html) throw new TypeError("innerHTML prop must be string");
+                                    if ("script" === node.name) el.text = html; else {
+                                        el.innerHTML = html;
+                                        !function(el, doc) {
+                                            void 0 === doc && (doc = window.document);
+                                            for (var _i2 = 0, _el$querySelectorAll2 = el.querySelectorAll("script"); _i2 < _el$querySelectorAll2.length; _i2++) {
+                                                var script = _el$querySelectorAll2[_i2];
+                                                var parentNode = script.parentNode;
+                                                if (parentNode) {
+                                                    var newScript = doc.createElement("script");
+                                                    newScript.text = script.textContent;
+                                                    parentNode.replaceChild(newScript, script);
+                                                }
+                                            }
+                                        }(el, doc);
+                                    }
+                                } else (ADD_CHILDREN[node.name] || ADD_CHILDREN.default)(el, node, renderer);
+                            }(el, node, doc, domRenderer);
                             return el;
                         }
                         throw new TypeError("Unhandleable node");
@@ -5349,28 +5321,6 @@
         }, _ADD_CHILDREN.default = function(el, node, renderer) {
             for (var _i6 = 0, _node$renderChildren2 = node.renderChildren(renderer); _i6 < _node$renderChildren2.length; _i6++) el.appendChild(_node$renderChildren2[_i6]);
         }, _ADD_CHILDREN);
-        function addChildren(el, node, doc, renderer) {
-            if (node.props.hasOwnProperty("innerHTML")) {
-                if (node.children.length) throw new Error("Expected no children to be passed when innerHTML prop is set");
-                var html = node.props.innerHTML;
-                if ("string" != typeof html) throw new TypeError("innerHTML prop must be string");
-                if ("script" === node.name) el.text = html; else {
-                    el.innerHTML = html;
-                    !function(el, doc) {
-                        void 0 === doc && (doc = window.document);
-                        for (var _i2 = 0, _el$querySelectorAll2 = el.querySelectorAll("script"); _i2 < _el$querySelectorAll2.length; _i2++) {
-                            var script = _el$querySelectorAll2[_i2];
-                            var parentNode = script.parentNode;
-                            if (parentNode) {
-                                var newScript = doc.createElement("script");
-                                newScript.text = script.textContent;
-                                parentNode.replaceChild(newScript, script);
-                            }
-                        }
-                    }(el, doc);
-                }
-            } else (ADD_CHILDREN[node.name] || ADD_CHILDREN.default)(el, node, renderer);
-        }
         function Spinner(_ref) {
             return node_node("div", {
                 class: "preloader spinner"
