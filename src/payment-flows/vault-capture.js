@@ -102,7 +102,7 @@ function handleValidateResponse({ ThreeDomainSecure, status, body, createOrder, 
             if (hasDescriptiveErrorCode) {
                 const details = body.details && body.details[0];
                 const { issue = '' } = details || {};
-                if (issue.trim().length === 0) {
+                if (issue.trim().length !== 0) {
                     throw new Error(`Validate payment failed with issue: ${ issue }`);
                 }
             }
